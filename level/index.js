@@ -200,7 +200,7 @@ function buildSvg() {
         console.log('level: ', level);
         console.log('currentSubLevelToShow: ', currentSubLevelToShow);
         console.log('pointsOnLevel: ', pointsOnLevel.length);
-        console.log('______________________');
+        console.log('_______');
 
         let currentClusterData = getCurrentClusterData(prevScale);
         let currentSet = clusterize(pointsOnLevel, currentClusterData.sensivity);
@@ -216,7 +216,6 @@ function buildSvg() {
     });
 
     let zoomObj = d3.zoom()
-        // .extent([[0, 0], [3000, 1850]])
         .scaleExtent([minScale, maxScale])
         .on("zoom", () => {
             deleteSet('svg', '.showPinsInCluster');
@@ -230,7 +229,6 @@ function getCurrentClusterData(scale = 1) {
     let currentClusterData;
     for (let item of clusterdata) {
         if (scale > item.minScale && scale < item.maxScale) {
-            // clusterPointId = item.clusterPointId;
             currentClusterData = item;
             break;
         }
