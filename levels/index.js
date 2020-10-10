@@ -83,8 +83,10 @@ function colorizeFloors(event, defaultValue = true) {
     if (defaultValue) {
         element.style.fill = 'none';
         element.style.stroke = 'none';
-        deck.style.fill = 'none';
-        deck.style.stroke = 'none';
+        if(deck) {
+            deck.style.fill = 'none';
+            deck.style.stroke = 'none';
+        }
 
     } else {
         element.style.fill = style.hoverFillColor;
@@ -92,9 +94,11 @@ function colorizeFloors(event, defaultValue = true) {
         element.style.strokeWidth = style.strokeWidth;
         element.style.cursor = 'pointer';
 
-        deck.style.fill = style.deckFillColor;
-        deck.style.stroke = style.deckStrokeColor;
-        deck.style.strokeWidth = style.strokeWidth;
+        if(deck) {
+            deck.style.fill = style.deckFillColor;
+            deck.style.stroke = style.deckStrokeColor;
+            deck.style.strokeWidth = style.strokeWidth;
+        }
     }
 }
 
