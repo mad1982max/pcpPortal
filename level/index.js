@@ -193,7 +193,7 @@ function buildSvg() {
         })
     floor = floorLayer.append("image");
     floor.attr("class", "currentFloor");
-    floor.attr("href", floorSrc);
+    floor.attr("xlink:href", floorSrc);
     floor.on("load", () => {
         pointsOnLevel = getPointOnLevel(points, levelInfo, currentSubLevelToShow);
 
@@ -346,5 +346,5 @@ function clickSubFloor(e) {
     reColorizeSubFloor(asideContent, currentSubLevelToShow);
 
     floorSrc = `../assets/img/level/${level}_${currentSubLevelToShow}.png`;
-    floor.attr("href", floorSrc);
+    floor.attr("xlink:href", floorSrc);
 }
