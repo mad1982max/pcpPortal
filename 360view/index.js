@@ -150,6 +150,9 @@ function makeResizableMapWrapper(div) {
         element.style.width = width + 'px';
         element.style.height = height + 'px'; 
         
+        if(svg.select('.tooltip')) {
+            deleteSet('doc', '.tooltip');
+        }
         resizeFnSvgHeight();       
     }
 
