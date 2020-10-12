@@ -49,10 +49,10 @@ let levelsEdgeInfo = [
         isSub: true,
         sub_0: {
             minH: 58.0,
-            maxH: 60,
+            maxH: 62.5,
         },
         sub_1: {
-            minH: 60,
+            minH: 62.5,
         }
     }
 ]

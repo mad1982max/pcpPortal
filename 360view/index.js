@@ -150,7 +150,7 @@ function makeResizableMapWrapper(div) {
         element.style.width = width + 'px';
         element.style.height = height + 'px'; 
         
-        if(svg.select('.tooltip')) {
+        if(svg.select()) {
             deleteSet('doc', '.tooltip');
         }
         resizeFnSvgHeight();       
@@ -337,7 +337,7 @@ function buildSvg() {
     .attr('class', 'end')
     .attr("offset", "100%")
     .attr("stop-color", viewCone.colorStop)
-    .attr("stop-opacity", 0.1);
+    .attr("stop-opacity", 0);
 
     mainLayer = svg.append("g");
     mainLayer
