@@ -1,9 +1,9 @@
 'use strict';
 let levelInfo;
-let pointName, level, currentSubLevelToShow, zoomFn;
+let pointName, level, currentSubLevelToShow;
 let floorSrc, set, svg, mainLayer, zoomObj;
 let pointsOnLevel, currentScene;
-let isFirstMapAppear = true;
+let oldFov, oldYaw;
 
 let floor;
 let minScale = 0.3;
@@ -17,34 +17,11 @@ let tooltip = {
     defaultColor: "#FF2A2A",
     checkedColor: "#00b359",
     defaultR: 15,
-    checkedR: 25
+    checkedR: 25,
+    posYDelta: 15,
+    posXDelta1: -35,
+    posXDelta2: -35,
 }
-
-let clusterdata = [{
-    clusterPointId: 0,
-    sensivity: 200,
-    minScale: minScale,
-    maxScale: 1.6,
-    rCuster: 43,
-    textCluster: 48,
-    rPin: 25,
-    textPin: 20,
-    dyTextCluster: 14,
-    dyTextPin: 6
-},
-{
-    clusterPointId: 1,
-    sensivity: 0,
-    minScale: 1.6,
-    maxScale: maxScale,
-    rCuster: 43,
-    textCluster: 20,
-    rPin: 15,
-    textPin: 12,
-    dyTextCluster: 12,
-    dyTextPin: 4
-}
-]
 
 let viewCone = {
     width: 130,
@@ -56,7 +33,7 @@ let viewCone = {
 }
 
 const mapInit = {
-    widthRatioToWind: 0.5,
+    widthRatioToWind: 0.3,
     imgWidth: 3000,
     imgHeight: 1850,
     minWidth: 400,
@@ -76,8 +53,6 @@ function defineData4Floor() {
     floorSrc = floorSrcFn(level, levelInfo.isSub, currentSubLevelToShow);
     currentScene = tails.find(scene => scene.name == pointName);
 }
-
-
 
 function getPointOnLevel(points, level, sub) {
     if ((!level.isSub && sub !== "sub_0") || !level[sub]) {
@@ -110,10 +85,8 @@ function makeResizableMapWrapper(div) {
     let original_mouse_y = 0;
 
     function touchStart(e) {
-
         e.preventDefault();
         e.stopPropagation();
-
         let {
             height,
             width,
@@ -133,27 +106,26 @@ function makeResizableMapWrapper(div) {
         window.addEventListener('mouseup', stopResize);
         window.addEventListener('touchend', stopResize);
     }
-
     resizer.addEventListener('mousedown', touchStart);
     resizer.addEventListener('touchstart', touchStart);
 
     function resizeByDrag(e) {
 
         let currentXpos;
-        if(e.constructor.name === "TouchEvent") {
+        if (e.constructor.name === "TouchEvent") {
             currentXpos = e.touches[0].pageX > 0 ? e.touches[0].pageX : 0
-        } else if(e.constructor.name === "MouseEvent") {
+        } else if (e.constructor.name === "MouseEvent") {
             currentXpos = e.pageX > 0 ? e.pageX : 0
         }
         const width = original_width - (currentXpos - original_mouse_x);
         const height = width / mapInit.imgWidth * mapInit.imgHeight;
         element.style.width = width + 'px';
-        element.style.height = height + 'px'; 
-        
-        if(svg.select()) {
+        element.style.height = height + 'px';
+
+        if (svg.select()) {
             deleteSet('doc', '.tooltip');
         }
-        resizeFnSvgHeight();       
+        resizeFnSvgHeight();
     }
 
     function stopResize() {
@@ -188,12 +160,9 @@ function onloadFn() {
         window.location.reload();
     });
 
-  
-    
     initMapWidth();
     resizeFn();
     buildSvg();
-    // isFirstMapAppear = false;    
 }
 
 
@@ -202,12 +171,12 @@ function resizeFn() {
     let windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     const mapList = document.querySelector('#mapList');
     const mapListWidth = mapList.offsetWidth;
-    if(mapListWidth >= windowWidth) {
+    if (mapListWidth >= windowWidth) {
         const height = windowWidth / mapInit.imgWidth * mapInit.imgHeight;
         mapList.style.width = windowWidth + 'px';
         mapList.style.height = height + 'px';
     }
-    if(svg) {
+    if (svg) {
         resizeFnSvgHeight();
     }
 }
@@ -215,13 +184,10 @@ function resizeFn() {
 function initMapWidth() {
     let windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-    let mapWidth = windowWidth * mapInit.widthRatioToWind > mapInit.minWidth? windowWidth * mapInit.widthRatioToWind : mapInit.minWidth
-
-
+    let mapWidth = windowWidth * mapInit.widthRatioToWind > mapInit.minWidth ? windowWidth * mapInit.widthRatioToWind : mapInit.minWidth;
     let asideWrapper = document.querySelector('#mapList');
     asideWrapper.style.width = mapWidth + 'px';
     asideWrapper.style.height = mapWidth / mapInit.imgWidth * mapInit.imgHeight + 'px';
-
 }
 
 function getNewSvgHeight() {
@@ -236,9 +202,9 @@ function resizeFnSvgHeight() {
 
 function findNextBaseLevel(levelInfo, counter) {
     let nextLevel = levelsEdgeInfo[levelInfo.id + counter];
-    if(!nextLevel) {
-        if(counter > 0) {
-            nextLevel = levelsEdgeInfo.find(floor => floor.id === 0);            
+    if (!nextLevel) {
+        if (counter > 0) {
+            nextLevel = levelsEdgeInfo.find(floor => floor.id === 0);
         } else {
             let numOfFloors = levelsEdgeInfo.length;
             nextLevel = levelsEdgeInfo.find(floor => floor.id === numOfFloors - 1);
@@ -260,14 +226,14 @@ function changeStairsFn(counter) {
     let nextSubFloor = nextSubFloorFn(currentSubLevelToShow, counter, levelInfo.isSub);
 
     deleteSet('svg', '.set');
-    
+
     if (nextSubFloor === "_") {
         levelInfo = findNextBaseLevel(levelInfo, counter);
         level = levelInfo.levelName;
 
         if (levelInfo.isSub) {
-            currentSubLevelToShow = counter < 0 ? "sub_1" : "sub_0";  
-            
+            currentSubLevelToShow = counter < 0 ? "sub_1" : "sub_0";
+
         } else {
             currentSubLevelToShow = "sub_0"
         }
@@ -275,7 +241,7 @@ function changeStairsFn(counter) {
         currentSubLevelToShow = nextSubFloor;
     }
 
-    floorSrc = floorSrcFn(level, levelInfo.isSub, currentSubLevelToShow); 
+    floorSrc = floorSrcFn(level, levelInfo.isSub, currentSubLevelToShow);
 
     svg
         .select('.floorLayer')
@@ -286,7 +252,7 @@ function changeStairsFn(counter) {
 }
 
 function floorSrcFn(level, isSubLevelExist, currentSubLevelToShow) {
-    
+
     let tail = isSubLevelExist ? `_${currentSubLevelToShow}` : "";
     return `../assets/img/level/${level}${tail}.png`
 }
@@ -298,7 +264,7 @@ function centerizeFn() {
         .call(zoomObj.transform, d3.zoomIdentity.translate(0, 0).scale(1));
 }
 
-function changePinFn(counter) {    
+function changePinFn(counter) {
     let currentPinIndex = pointsOnLevel.findIndex(point => point.name == pointName);
     let nextIndex = currentPinIndex + counter;
     if (nextIndex > pointsOnLevel.length - 1) nextIndex = 0;
@@ -306,7 +272,7 @@ function changePinFn(counter) {
     pointName = pointsOnLevel[nextIndex].name;
     clickNext.notify(pointName);
     switchPhoto360Observable.notify(pointName);
-    
+
 }
 
 function buildSvg() {
@@ -321,23 +287,23 @@ function buildSvg() {
     let defs = svg.append("defs");
 
     let gradient = defs.append("linearGradient")
-    .attr("id", "svgGradient")
-    .attr("x1", "0%")
-    .attr("x2", "0%")
-    .attr("y1", "20%")
-    .attr("y2", "100%");
+        .attr("id", "svgGradient")
+        .attr("x1", "0%")
+        .attr("x2", "0%")
+        .attr("y1", "20%")
+        .attr("y2", "100%");
 
     gradient.append("stop")
-    .attr('class', 'start')
-    .attr("offset", "0%")
-    .attr("stop-color", viewCone.colorStart)
-    .attr("stop-opacity", 0.9);
+        .attr('class', 'start')
+        .attr("offset", "0%")
+        .attr("stop-color", viewCone.colorStart)
+        .attr("stop-opacity", 0.9);
 
     gradient.append("stop")
-    .attr('class', 'end')
-    .attr("offset", "100%")
-    .attr("stop-color", viewCone.colorStop)
-    .attr("stop-opacity", 0);
+        .attr('class', 'end')
+        .attr("offset", "100%")
+        .attr("stop-color", viewCone.colorStop)
+        .attr("stop-opacity", 0);
 
     mainLayer = svg.append("g");
     mainLayer
@@ -352,16 +318,16 @@ function buildSvg() {
     let floor = floorLayer.append("image");
     floor.attr("class", "currentFloor");
     floor.attr("xlink:href", floorSrc);
-    floor.on("load", () => {        
+    floor.on("load", () => {
         pointsOnLevel = getPointOnLevel(points, levelInfo, currentSubLevelToShow);
 
         drawSet(pointsOnLevel);
         miniMapisLoad.notify();
 
-    mainLayer
-        .transition()
-        .duration(400)
-        .attr("opacity", "1");       
+        mainLayer
+            .transition()
+            .duration(400)
+            .attr("opacity", "1");
     });
 
     zoomObj = d3.zoom()
@@ -381,7 +347,7 @@ function zoomed() {
 
 function drawSet(currentSet, className = 'set') {
     set = mainLayer.append('g')
-        set.attr('class', className)
+    set.attr('class', className)
         .selectAll('g')
         .data(currentSet)
         .join("g")
@@ -429,22 +395,30 @@ function clickedOnPin(d) {
     buildViewCone()
 };
 
-function changePinFn(counter) {    
+function changePinFn(counter) {
     let currentPinIndex = pointsOnLevel.findIndex(point => point.name == pointName);
     let nextIndex = currentPinIndex + counter;
     if (nextIndex > pointsOnLevel.length - 1) nextIndex = 0;
     if (nextIndex < 0) nextIndex = pointsOnLevel.length - 1;
     pointName = pointsOnLevel[nextIndex].name;
     clickNext.notify(pointName);
-    switchPhoto360Observable.notify(pointName);    
+    switchPhoto360Observable.notify(pointName);
 }
 
 clickNext.subscribe((pointName) => {
     changeCurrentOnMiniMap(pointName);
 });
 
-rotationObservable.subscribe((data) => {
-    changeView(data/ Math.PI*180);
+viewChangeObservable.subscribe(({ fov, yaw}) => {
+    if (yaw !== oldYaw) {
+        changeViewDirection(yaw);
+        oldYaw = yaw;
+    }
+
+    if (fov !== oldFov) {
+        changeViewAngle(fov);
+        oldFov = fov;
+    }
 });
 
 miniMapisLoad.subscribe(data => {
@@ -466,8 +440,8 @@ function toolTipFn(id, flag = true) {
     if (!flag) return;
     let x = d3.event.pageX;
     let y = d3.event.pageY;
-    let posYDelta = 15;
-    let posXDelta = window.innerWidth - d3.event.pageX < 50 ? -35 : 15;
+    let posYDelta = tooltip.posYDelta;
+    let posXDelta = window.innerWidth - d3.event.pageX < 50 ? tooltip.posXDelta1 : tooltip.posXDelta2;
     let tooltipElem = document.createElement('div');
     tooltipElem.className = 'tooltip';
     tooltipElem.innerHTML = id;
@@ -477,21 +451,38 @@ function toolTipFn(id, flag = true) {
     document.body.append(tooltipElem);
 }
 
-function changeView(angle) {
-    let point = pointsOnLevel.find(point => point.name == pointName);
-    if(point) {
-        set
-            .select('.view')
-            .attr('transform', `rotate(${angle + viewCone.initRotateAnge} ${point.x_img} ${point.y_img})`)
-    } else {
-        console.log("point doesn't evist");
-    }    
+function changeViewAngle(fov) {
+    viewCone.width = viewCone.height * Math.tan(fov/2)/2; // devider 2 for better view
+    if (pointsOnLevel) {
+        let point = pointsOnLevel.find(point => point.name == pointName);
+        if (point) {
+            set
+                .select('.view')
+                .attr('points', `${point.x_img},${point.y_img}, ${point.x_img + viewCone.width}, ${point.y_img + viewCone.height}, ${point.x_img - viewCone.width}, ${point.y_img + viewCone.height}`)
+        } else {
+            console.log("point doesn't exist");
+        }
+    }
+}
+
+function changeViewDirection(yaw) {
+    let angle = yaw / Math.PI * 180;
+    if (pointsOnLevel) {
+        let point = pointsOnLevel.find(point => point.name == pointName);
+        if (point) {
+            set
+                .select('.view')
+                .attr('transform', `rotate(${angle + viewCone.initRotateAnge} ${point.x_img} ${point.y_img})`)
+        } else {
+            console.log("point doesn't exist");
+        }
+    }
 }
 
 function buildViewCone(angle = 0) {
     let point = pointsOnLevel.find(point => point.name == pointName);
 
-    if(point) {
+    if (point) {
         set
             .insert('polygon', ':first-child')
             .attr('class', 'view')
@@ -500,30 +491,8 @@ function buildViewCone(angle = 0) {
             //only for test
             .attr('transform', `rotate(${angle + viewCone.initRotateAnge} ${point.x_img} ${point.y_img})`)
             .attr('fill', "url(#svgGradient)")
-    }    
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function returnFn() {
     document.location.href = '../level/index.html?' + 'level=' + level + '&isAsideVis=0' + '&sub=' + currentSubLevelToShow;

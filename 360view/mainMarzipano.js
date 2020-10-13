@@ -20,25 +20,25 @@
     var mapListToggleElement = document.querySelector('#mapToggle');
 
 
-    panoElement.addEventListener('mousedown', mousedownFn);
-    panoElement.addEventListener('touchstart', mousedownFn);
+    // panoElement.addEventListener('mousedown', mousedownFn);
+    // panoElement.addEventListener('touchstart', mousedownFn);
 
-    function mousedownFn() {
-        panoElement.addEventListener('mousemove', rotateMapFn);
-        panoElement.addEventListener('touchmove', rotateMapFn);
+    // function mousedownFn() {
+    //     panoElement.addEventListener('mousemove', rotateMapFn);
+    //     panoElement.addEventListener('touchmove', rotateMapFn);
 
-        function rotateMapFn() {
-            var scene = viewer.scene();
-            var view = scene.view();
-            var yaw = view.yaw();
-            rotationObservable.notify(yaw)
-        }
-        panoElement.addEventListener('mouseup', mouseupFn);
+    //     function rotateMapFn() {
+    //         var scene = viewer.scene();
+    //         var view = scene.view();
+    //         var yaw = view.yaw();
+    //         rotationObservable.notify(yaw)
+    //     }
+    //     panoElement.addEventListener('mouseup', mouseupFn);
 
-        function mouseupFn() {
-            panoElement.removeEventListener('mousemove', rotateMapFn);
-        }
-    }
+    //     function mouseupFn() {
+    //         panoElement.removeEventListener('mousemove', rotateMapFn);
+    //     }
+    // }
 
     // Detect whether we are on a touch device.
     document.body.classList.add('no-touch');
@@ -61,6 +61,13 @@
 
     // Initialize viewer.
     var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
+
+    viewer.addEventListener('viewChange', function() {
+        let fov = viewer.view().fov();
+        let yaw = viewer.view().yaw();
+        viewChangeObservable.notify({fov,yaw})
+    })
+
     let scene = createScene(currentScene);
     switchScene(scene);
 
@@ -72,7 +79,7 @@
             });
         var geometry = new Marzipano.CubeGeometry(sceneData.levels);
 
-        var limiter = Marzipano.RectilinearView.limit.traditional(sceneData.faceSize, 100 * Math.PI / 180, 120 * Math.PI / 180);
+        var limiter = Marzipano.RectilinearView.limit.traditional(sceneData.faceSize, 180 * Math.PI / 180, 140 * Math.PI / 180);
         var view = new Marzipano.RectilinearView(sceneData.initialViewParameters, limiter);
 
         var scene = viewer.createScene({
@@ -91,7 +98,6 @@
 
     // Set handler for scene list toggle.
     mapListToggleElement.addEventListener('click', togglemapList);
-
 
     function switchScene(scene) {
         scene.view.setParameters(scene.data.initialViewParameters);
