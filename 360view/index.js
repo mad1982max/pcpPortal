@@ -290,14 +290,27 @@ function buildSvg() {
         .attr("id", "svgGradient")
         .attr("x1", "0%")
         .attr("x2", "0%")
-        .attr("y1", "20%")
-        .attr("y2", "100%");
+        .attr("y1", "10%")
+        .attr("y2", "80%")
+
+
+    gradient.append("start")
+        .attr('class', 'start')
+        .attr("offset", "0%")
+        .attr("stop-color", viewCone.colorStart)
+        .attr("stop-opacity", 1);
+
+    gradient.append("start")
+        .attr('class', 'end')
+        .attr("offset", "0%")
+        .attr("stop-color", viewCone.colorStart)
+        .attr("stop-opacity", 0.6);
 
     gradient.append("stop")
         .attr('class', 'start')
         .attr("offset", "0%")
         .attr("stop-color", viewCone.colorStart)
-        .attr("stop-opacity", 0.9);
+        .attr("stop-opacity", 1);
 
     gradient.append("stop")
         .attr('class', 'end')
