@@ -452,7 +452,7 @@ function toolTipFn(id, flag = true) {
 }
 
 function changeViewAngle(fov) {
-    viewCone.width = viewCone.height * Math.tan(fov/2)/2; // devider 2 for better view
+    viewCone.width = viewCone.height * Math.tan(fov/2)/1.5; // devider 1.5 for better view
     if (pointsOnLevel) {
         let point = pointsOnLevel.find(point => point.name == pointName);
         if (point) {
