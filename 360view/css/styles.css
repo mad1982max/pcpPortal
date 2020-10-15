@@ -1,0 +1,311 @@
+#menu{
+    position: fixed;
+    right: 0;
+    padding: 10px 15px;
+    z-index: 1;
+    width: fit-content;
+    background-color: #7f4;
+    transition: transform 0.2s;
+    bottom: 0;
+}
+#menu.hide{
+    transform: translateY(100%);
+}
+
+#showHideButton{
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+}
+
+#rightDownPanel{
+    z-index: 1;
+    position: relative;
+    min-width: 300px;
+    min-height: 300px;
+    bottom: 0;
+    right: 0;
+}
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* normalize */
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -ms-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -ms-content-zooming: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    /* font-family: "OstrichSans-Black"; */
+    font-size: 16px;
+    background-color: #000;
+    color: #fff;
+}
+
+a,
+a:hover,
+a:active,
+a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+#map-toggle {
+    background-color: dodgerblue;
+}
+
+#map-toggle.enabled {
+    background-color: transparent;
+}
+
+#map-toggle>i {
+    color: #f2f2f2;
+}
+
+#map-toggle.enabled>i {
+    color: dodgerblue;
+}
+
+/*#map-list {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: rgba(58, 68, 84, 0.5);
+    border-radius: 5px 0 5px 5px;
+    overflow: hidden;
+    -webkit-transition: transform 0.6s ease-in-out;
+    transition: transform 0.6s ease-in-out;
+}*/
+
+.btn-back {
+    padding: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: rgba(250, 250, 250, 0.8);
+    line-height: 70px;
+}
+
+.btn-miniMap {
+    font-size: 16px;
+    color: white;
+    background: #303030;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+button,
+button:active,
+button:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+img {
+    width: 100%;
+}
+
+.tooltip {
+    position: fixed;
+    box-sizing: border-box;
+    font-size: 12px;
+    z-index: 100;
+    width: 35px;
+    line-height: 30px;
+    height: 35px;
+    border: 2px solid white;
+    border-radius: 50%;
+    text-align: center;
+    color: rgb(252, 250, 250);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
+}
+
+#wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.resizeMapBtn {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 20;
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.mapBtn {
+    margin-top: 5px;
+    position: absolute;
+    right: 5px;
+    z-index: 20;
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 9px;
+}
+
+.mapBtn:hover {
+    background: #3399ff;
+    background: rgba(51, 153, 255, 0.6);
+}
+
+@media (hover: none) {
+    .mapBtn:hover {
+        background: inherit;
+    }
+}
+
+.centerizeMapBtn {
+    top: 0;
+}
+
+.stairsUpBtn {
+    top: 45px;
+}
+
+.stairsDownBtn {
+    top: 90px;
+}
+
+#resizeMapBtn:hover {
+    cursor: nesw-resize;
+}
+#map-list{
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #3a445480;
+    transition: transform 0.4s ease-in-out;
+}
+#map-toggle.enabled>#map-list{
+    transform: translateX(100%);
+}
+
+header.top{
+    min-height: 2.5rem;
+    background-color: #ddda;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    color: #333;
+}
+header>.arrows{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+header i{
+    font-size: 2rem;
+}
+.button-like{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    width: 3rem;
+}
+.point-name-display{
+    margin: auto 0;
+    font-size: 2rem;
+}
+body{
+    font-family: Arial, sans-serif;
+}
