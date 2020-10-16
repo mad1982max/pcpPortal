@@ -36,7 +36,8 @@ const mapInit = {
     widthRatioToWind: 0.3,
     imgWidth: 3000,
     imgHeight: 1850,
-    minWidth: 400,
+    minApearWidth: 400,
+    minWidth: 300,
     ratio: 1.7
 }
 
@@ -101,15 +102,15 @@ function makeResizableMapWrapper(div) {
         original_mouse_x = e.pageX || e.touches[0].pageX;
         original_mouse_y = e.pageY || e.touches[0].pageY;
 
-        window.addEventListener('mousemove', resizeByDrag);
-        window.addEventListener('touchmove', resizeByDrag);
+        window.addEventListener('mousemove', resizeWrapperDiv);
+        window.addEventListener('touchmove', resizeWrapperDiv);
         window.addEventListener('mouseup', stopResize);
         window.addEventListener('touchend', stopResize);
     }
     resizer.addEventListener('mousedown', touchStart);
     resizer.addEventListener('touchstart', touchStart);
 
-    function resizeByDrag(e) {
+    function resizeWrapperDiv(e) {
 
         let currentXpos;
         if (e.constructor.name === "TouchEvent") {
@@ -117,7 +118,8 @@ function makeResizableMapWrapper(div) {
         } else if (e.constructor.name === "MouseEvent") {
             currentXpos = e.pageX > 0 ? e.pageX : 0
         }
-        const width = original_width - (currentXpos - original_mouse_x);
+        let width = original_width - (currentXpos - original_mouse_x);
+        if(width < mapInit.minWidth) width = mapInit.minWidth; // minWidth
         const height = width / mapInit.imgWidth * mapInit.imgHeight;
         element.style.width = width + 'px';
         element.style.height = height + 'px';
@@ -129,8 +131,8 @@ function makeResizableMapWrapper(div) {
     }
 
     function stopResize() {
-        window.removeEventListener('mousemove', resizeByDrag);
-        window.removeEventListener('touchmove', resizeByDrag);
+        window.removeEventListener('mousemove', resizeWrapperDiv);
+        window.removeEventListener('touchmove', resizeWrapperDiv);
     }
 }
 
@@ -153,7 +155,7 @@ function onloadFn() {
     let centerizeMapBtn = document.getElementById('centerizeMapBtn');
     centerizeMapBtn.addEventListener('click', centerizeFn);
 
-    window.addEventListener('resize', resizeFn);
+    window.addEventListener('resize', resizeWindowFn);
 
     window.addEventListener("orientationchange", function (e) {
         document.body.style.opacity = 0;
@@ -161,21 +163,30 @@ function onloadFn() {
     });
 
     initMapWidth();
-    resizeFn();
+    resizeWindowFn();
     buildSvg();
 }
 
 
 
-function resizeFn() {
+function resizeWindowFn() {
     let windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     const mapList = document.querySelector('#mapList');
-    const mapListWidth = mapList.offsetWidth;
+    let mapListWidth = mapList.offsetWidth;
+
     if (mapListWidth >= windowWidth) {
-        const height = windowWidth / mapInit.imgWidth * mapInit.imgHeight;
-        mapList.style.width = windowWidth + 'px';
-        mapList.style.height = height + 'px';
+         if(windowWidth < mapInit.minWidth ) {
+            const height = mapInit.minWidth / mapInit.imgWidth * mapInit.imgHeight;
+            mapList.style.width = mapInit.minWidth + 'px';
+            mapList.style.height = height + 'px';
+         } else {
+
+             const height = windowWidth / mapInit.imgWidth * mapInit.imgHeight;
+             mapList.style.width = windowWidth + 'px';
+             mapList.style.height = height + 'px';
+         }
     }
+    
     if (svg) {
         resizeFnSvgHeight();
     }
@@ -184,20 +195,20 @@ function resizeFn() {
 function initMapWidth() {
     let windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
-    let mapWidth = windowWidth * mapInit.widthRatioToWind > mapInit.minWidth ? windowWidth * mapInit.widthRatioToWind : mapInit.minWidth;
+    let mapWidth = windowWidth * mapInit.widthRatioToWind > mapInit.minApearWidth ? windowWidth * mapInit.widthRatioToWind : mapInit.minApearWidth;
+
     let asideWrapper = document.querySelector('#mapList');
     asideWrapper.style.width = mapWidth + 'px';
     asideWrapper.style.height = mapWidth / mapInit.imgWidth * mapInit.imgHeight + 'px';
 }
 
-function getNewSvgHeight() {
+function getWrapperDivHeight() {
     const mapList = document.querySelector('#mapList');
     return mapList.offsetHeight
 }
 
 function resizeFnSvgHeight() {
-    let freeHeight = getNewSvgHeight();
-    svg.attr('height', freeHeight)
+    svg.attr('height', getWrapperDivHeight())
 }
 
 function findNextBaseLevel(levelInfo, counter) {
@@ -276,7 +287,7 @@ function changePinFn(counter) {
 }
 
 function buildSvg() {
-    let freeHeight = getNewSvgHeight();
+    let freeHeight = getWrapperDivHeight();
     svg = d3.select("#wrapper").append("svg");
     svg
         .attr("class", "svgContainer")
@@ -405,7 +416,7 @@ function clickedOnPin(d) {
     switchPhoto360Observable.notify(pointName);
     toolTipFn(pointName);
     deleteSet('svg', '.view');
-    buildViewCone()
+    // buildViewCone()
 };
 
 function changePinFn(counter) {
@@ -422,20 +433,20 @@ clickNext.subscribe((pointName) => {
     changeCurrentOnMiniMap(pointName);
 });
 
-viewChangeObservable.subscribe(({ fov, yaw}) => {
-    if (yaw !== oldYaw) {
-        changeViewDirection(yaw);
-        oldYaw = yaw;
-    }
+viewChangeObservable.subscribe(({ fov, yaw }) => {
+    // if (yaw !== oldYaw) {
+    //     changeViewDirection(yaw);
+    //     oldYaw = yaw;
+    // }
 
-    if (fov !== oldFov) {
-        changeViewAngle(fov);
-        oldFov = fov;
-    }
+    // if (fov !== oldFov) {
+    //     changeViewAngle(fov);
+    //     oldFov = fov;
+    // }
 });
 
 miniMapisLoad.subscribe(data => {
-    buildViewCone();
+    // buildViewCone();
     console.log('FLOOR EXISTS');
 })
 
@@ -444,7 +455,7 @@ function changeCurrentOnMiniMap() {
     reDesignAfterClick('fill', 'circle', tooltip.defaultColor, target, tooltip.checkedColor);
     reDesignAfterClick('r', 'circle', tooltip.defaultR, target, tooltip.checkedR);
     deleteSet('svg', '.view');
-    buildViewCone();
+    // buildViewCone();
 }
 
 

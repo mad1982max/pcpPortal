@@ -60,7 +60,7 @@
     };
 
     // Initialize viewer.
-    var viewer = new Marzipano.Viewer(panoElement, viewerOpts);
+    var viewer = new Marzipano.Viewer(panoElement, viewerOpts);    
 
     viewer.addEventListener('viewChange', function() {
         let fov = viewer.view().fov();
@@ -70,6 +70,11 @@
 
     let scene = createScene(currentScene);
     switchScene(scene);
+
+    // let fov = viewer.view().fov();
+    // let yaw = viewer.view().yaw();
+    // viewChangeObservable.notify({fov,yaw})
+
 
     function createScene(sceneData) {
         var urlPrefix = "tiles";
@@ -81,6 +86,8 @@
 
         var limiter = Marzipano.RectilinearView.limit.traditional(sceneData.faceSize, 180 * Math.PI / 180, 140 * Math.PI / 180);
         var view = new Marzipano.RectilinearView(sceneData.initialViewParameters, limiter);
+
+        
 
         var scene = viewer.createScene({
             source: source,
