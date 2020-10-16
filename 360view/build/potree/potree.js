@@ -9599,9 +9599,25 @@ Potree.utils = class{
 		
 		let raycaster = new THREE.Raycaster();
 		raycaster.setFromCamera(nmouse, camera);
-		let ray = raycaster.ray;
+		const ray = raycaster.ray;
+		const direction = ray.direction;
+		const distance = depthCubemap.getDistance(direction);
+		if (!distance) return null;
+		console.log(distance.toFixed(2));
+		const coordinate = direction.clone().normalize().multiplyScalar(distance).add(camera.position);
+		return {
+			location: coordinate,
+			distance: distance,
+			pointcloud: null,
+			point: {
+				classification: 0,
+				color: [255,255,255],
+				normal: [0,0,0],
+				position: coordinate.clone()
+			}
+		};
 		
-		let selectedPointcloud = null;
+		/*let selectedPointcloud = null;
 		let closestDistance = Infinity;
 		let closestIntersection = null;
 		let closestPoint = null;
@@ -9632,7 +9648,7 @@ Potree.utils = class{
 			};
 		}else{
 			return null;
-		}
+		}//*/
 	};	
 		
 	static pixelsArrayToImage(pixels, width, height){
@@ -10283,7 +10299,6 @@ Potree.Measure = class Measure extends THREE.Object3D{
 					e.viewer.scene.camera, 
 					e.viewer.renderer, 
 					e.viewer.scene.pointclouds);
-				console.info('this is the place where you can change the way the beam is built');
 				if(I){
 					let i = this.spheres.indexOf(e.drag.object);
 					if(i !== -1){

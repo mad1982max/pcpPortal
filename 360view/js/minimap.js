@@ -24,8 +24,8 @@ let tooltip = {
 }
 
 let viewCone = {
-    width: 130,
-    height: 300,
+    width: 800,
+    height: 1500,
     colorStart: "#00b359",
     colorStop: "#0066ff",
     opacity: 1,

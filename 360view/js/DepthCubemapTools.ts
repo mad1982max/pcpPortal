@@ -1,23 +1,40 @@
 
 class DepthCubemap{
-    private canvases: HTMLCanvasElement[];
+    private _canvases: HTMLCanvasElement[];
+    public IsReady(): boolean{
+        return this._readyCounter === 6;
+    }
+    private _readyCounter: number;
+    private _id: string;
 
-    constructor(cubeImageSources: string[]) {
-        this.canvases = cubeImageSources.map(function (src){
+    constructor() {
+        this._readyCounter = 0;
+    }
+
+    setupCube(cubeImageSources: string[], id: string) {
+        if (this._id === id) return;
+        this._id = id;
+
+        this._readyCounter = 0;
+        const add1ToReadyCounter = ()=>{
+            this._readyCounter++;
+        }
+        this._canvases = cubeImageSources.map(function (src){
             const img = document.createElement('img');
             const canvas = document.createElement('canvas');
             img.onload = function(){
                 canvas.width = img.width;
                 canvas.height = img.height;
                 canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
+                add1ToReadyCounter();
             };
             img.src = src;
             return canvas;
         });
     }
 
-    getDistanceFromCanvas(faceIndex: number, xFactor: number, yFactor: number){
-        const canvas = this.canvases[faceIndex];
+    private _getDistanceFromCanvas(faceIndex: number, xFactor: number, yFactor: number){
+        const canvas = this._canvases[faceIndex];
         const x = xFactor * canvas.width;
         const y = yFactor * canvas.height;
         const data = canvas.getContext('2d').getImageData(x, y, 1, 1).data;
@@ -29,18 +46,20 @@ class DepthCubemap{
     }
 
     getDistance(direction: Vector3){
-        const {x, y, faceIndex} = this.computeCanvasParameters(direction);
-        return  this.getDistanceFromCanvas(faceIndex, x, y);
+        if (!this.IsReady()) return null;
+        const {x, y, faceIndex} = this._computeCanvasParameters(direction);
+        return  this._getDistanceFromCanvas(faceIndex, x, y);
     }
 
-    computeCoordinate(viewPosition: Vector3, direction: Vector3, distance: number|undefined): Vector3{
+    computeCoordinate(viewPosition: Vector3, direction: Vector3, distance: number|undefined): Vector3|null {
+        if (!this.IsReady()) return null;
         if (!distance) {
             distance = this.getDistance(direction);
         }
         return direction.clone().normalize().multiplyScalar(distance).add(viewPosition);
     }
 
-    computeCanvasParameters(v: Vector3){
+    private _computeCanvasParameters(v: Vector3){
         v.normalize();
         let faceIndex = 0;
         const vAbs: Vector3 = v.clone().absolute();

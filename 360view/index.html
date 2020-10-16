@@ -31,11 +31,12 @@
     <script src="./libs/i18next/i18next.js"></script>
 
 	<script src="js/DepthCubemapTools.js"></script>
-	<script src="./build/potree/potree.js"></script>
 	<script>
 		// var position = viewer.scene.camera.position;
 		// var direction = new THREE.Vector3( 0, 0, - 1 ).applyQuaternion(viewer.scene.camera.quaternion);
+		var depthCubemap = new DepthCubemap();
 	</script>
+	<script src="./build/potree/potree.js"></script>
 	<!--<script src="../src/viewer/sidebar.js"></script>-->
 	
 	<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
@@ -141,7 +142,7 @@
 	<script>
 		let profiles = [];
 		const cubeSides = ['r','l','u','d','f','b'].map(function (side) { return side + '.jpg'; });
-		const depthMapSides = ['0','1','2','3','4','5'].map(function (side) { return side + '.png'; });
+		const depthMapSides = ['0','1','4','5','2','3'].map(function (side) { return side + '.png'; });
 		let config = new GeneralPointConfig('./pointclouds', profiles, 'pointcloud/cloud.js', cubeSides, '360', depthMapSides, 'depth-map-cube');
 		profiles.push(new PointProfile(config, '1', new THREE.Vector3(-44.1870, 57.0310, 27.2240), new THREE.Euler(0,0,-54)));
 		profiles.push(new PointProfile(config, '2', new THREE.Vector3(-45.1440, 57.0160, 27.2290), new THREE.Euler(0,0,38)));
@@ -152,20 +153,6 @@
 		let sceneControl = new SceneControl(config);
 		let uiControl = new UIControl(sceneControl);
 		window.viewer = sceneControl.viewer; // potree can't work without it
-
-		/*const raycaster = new THREE.Raycaster();
-		const domElement = viewer.renderer.domElement;
-		domElement.addEventListener('mousemove', function (event){
-			const normalizedPosition = new THREE.Vector2(event.clientX, event.clientY);
-			normalizedPosition.x /= domElement.clientWidth;
-			normalizedPosition.y /= domElement.clientHeight;
-			normalizedPosition.multiplyScalar(2);
-			normalizedPosition.subScalar(1);
-			normalizedPosition.y *= -1;
-
-			raycaster.setFromCamera(normalizedPosition, viewer.scene.camera);
-			console.log(raycaster.ray.direction);
-		});//*/
 	</script>
   </body>
   <script src="../vendors/js/d3.js"></script>
@@ -192,6 +179,7 @@
 			  return;
 		  }
 		  sceneControl.setProfile(profile);
+		  depthCubemap.setupCube(profile.fullPathToDepthCubeImages(), profile.name);
 		  pointNameDisplay.textContent = pointCloudName;
 		  Potree.utils.setParameter('name', profile.name);
 		  const layerInfo = profile.getLayerInfo();
