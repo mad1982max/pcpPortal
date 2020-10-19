@@ -15,9 +15,9 @@
 
     // Grab elements from DOM.
     var panoElement = document.querySelector('#pano');
-    var sceneNameElement = document.querySelector('#titleBar .sceneName');
-    var mapListElement = document.querySelector('#mapList');
-    var mapListToggleElement = document.querySelector('#mapToggle');
+    var sceneNameElement = document.querySelector('.sceneName');
+    var mapWrapper = document.querySelector('#mapWrapper');
+    var mapListToggleElement = document.querySelector('#mapToggleIcon');
 
 
     // panoElement.addEventListener('mousedown', mousedownFn);
@@ -120,13 +120,13 @@
     togglemapList();
 
     function togglemapList() {
-        mapListElement.classList.toggle('enabled');
+        mapWrapper.classList.toggle('enabled');
         mapListToggleElement.classList.toggle('checked-map');
 
-        if (mapListElement.classList.contains('enabled')) {
-            mapListElement.style.transform = `translateX(100%)`;
+        if (mapWrapper.classList.contains('enabled')) {
+            mapWrapper.style.transform = `translateX(100%)`;
         } else {
-            mapListElement.style.transform = `translateX(0)`;
+            mapWrapper.style.transform = `translateX(0)`;
         }
         mapListToggleElement.classList.toggle('enabled');
     }

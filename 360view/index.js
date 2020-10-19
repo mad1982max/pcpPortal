@@ -111,7 +111,7 @@ function makeResizableMapWrapper(div) {
     resizer.addEventListener('touchstart', touchStart);
 
     function resizeWrapperDiv(e) {
-
+        let windheight = window.innerHeight;
         let currentXpos;
         if (e.constructor.name === "TouchEvent") {
             currentXpos = e.touches[0].pageX > 0 ? e.touches[0].pageX : 0
@@ -119,8 +119,15 @@ function makeResizableMapWrapper(div) {
             currentXpos = e.pageX > 0 ? e.pageX : 0
         }
         let width = original_width - (currentXpos - original_mouse_x);
+
         if(width < mapInit.minWidth) width = mapInit.minWidth; // minWidth
         const height = width / mapInit.imgWidth * mapInit.imgHeight;
+
+        if(height > windheight) {
+            height = windheight;
+            width = height * mapInit.imgWidth / mapInit.imgHeight;
+        }
+       
         element.style.width = width + 'px';
         element.style.height = height + 'px';
 
@@ -140,7 +147,7 @@ window.onload = onloadFn;
 
 function onloadFn() {
     document.body.style.opacity = 1;
-    makeResizableMapWrapper('#mapList');
+    makeResizableMapWrapper('#mapWrapper');
 
     let stairsUpBtn = document.getElementById('stairsUpBtn');
     let stairsDownBtn = document.getElementById('stairsDownBtn');
@@ -171,7 +178,7 @@ function onloadFn() {
 
 function resizeWindowFn() {
     let windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    const mapList = document.querySelector('#mapList');
+    const mapList = document.querySelector('#mapWrapper');
     let mapListWidth = mapList.offsetWidth;
 
     if (mapListWidth >= windowWidth) {
@@ -197,13 +204,13 @@ function initMapWidth() {
 
     let mapWidth = windowWidth * mapInit.widthRatioToWind > mapInit.minApearWidth ? windowWidth * mapInit.widthRatioToWind : mapInit.minApearWidth;
 
-    let asideWrapper = document.querySelector('#mapList');
+    let asideWrapper = document.querySelector('#mapWrapper');
     asideWrapper.style.width = mapWidth + 'px';
     asideWrapper.style.height = mapWidth / mapInit.imgWidth * mapInit.imgHeight + 'px';
 }
 
 function getWrapperDivHeight() {
-    const mapList = document.querySelector('#mapList');
+    const mapList = document.querySelector('#mapWrapper');
     return mapList.offsetHeight
 }
 
@@ -472,6 +479,7 @@ function toolTipFn(id, flag = true) {
     tooltipElem.style.left = (x + posXDelta) + 'px';
     tooltipElem.style.top = (y + posYDelta) + 'px';
     tooltipElem.style.backgroundColor = id == pointName ? tooltip.checkedColor : tooltip.defaultColor;
+    console.log(tooltipElem);
     document.body.append(tooltipElem);
 }
 

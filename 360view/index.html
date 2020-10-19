@@ -13,27 +13,41 @@
     }
   </style>
   <link rel="stylesheet" href="../vendors/css/reset.min.css">
+  <link href="../vendors/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
 
-<body class="multiple-scenes view-control-buttons">
+<body>
 
   <button class="btn btn-back" onclick=returnFn() type="button" id="backButton">
     <img class="backArrow" src="../assets/img/icons/back_arrow.svg" alt="">
   </button>
 
-  <div class="btn-next-group">
-    <button class='btn' id='prev'>
-      <img src="../assets/img/icons/left-arrow.svg" alt="">
-    </button>
-    <button class='btn' id='next'>
-      <img src="../assets/img/icons/right-arrow.svg" alt="">
-    </button>
+  <div class="container-fluid header">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-auto pr-0">
+        <button class='btn' id='prev'>
+          <img src="../assets/img/icons/left-arrow.svg" alt="">
+        </button>
+      </div>
+      <div class="col-1 px-0 sceneName text-center">        
+      </div>
+      <div class="col-auto pl-0">
+        <button class='btn' id='next'>
+          <img src="../assets/img/icons/right-arrow.svg" alt="">
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div id="pano"></div>
+  <div class="aside-menu">
+    <a href="javascript:void(0)" id="mapToggleIcon">
+      <img class="icon off" src="../assets/img/icons/minimap_grey.svg">
+      <img class="icon on" src="../assets/img/icons/minimap_white.svg">
+    </a>    
+  </div>
 
-  <div id="mapList" class="enabled">
+  <div id="mapWrapper" class="enabled">
     <div class="mapBtnGroup">
       <button draggable="true" class="resizeMapBtn" id="resizeMapBtn">
         <img src="../assets/img/icons/resize-ico.svg" alt="">
@@ -51,14 +65,8 @@
     <div id="wrapper"></div>
   </div>
 
-  <div id="titleBar">
-    <h1 class="sceneName"></h1>
-  </div>
+  <div id="pano"></div>
 
-  <a href="javascript:void(0)" id="mapToggle">
-    <img class="icon off" src="../assets/img/icons/minimap_grey.svg">
-    <img class="icon on" src="../assets/img/icons/minimap_white.svg">
-  </a>
 
   <script src="../vendors/js/es5-shim.js"></script>
   <script src="../vendors/js/eventShim.js"></script>
