@@ -13,7 +13,7 @@ let prevClusterPointId = 0;
 let singlePinColor = "#FF2A2A";
 let clusterPinColor = "#00BD63";
 
-let tooltip = {
+let tooltipItem = {
     defaultColor: "#FF2A2A",
     checkedColor: "#00b359",
     defaultR: 15,
@@ -132,7 +132,7 @@ function makeResizableMapWrapper(div) {
         element.style.height = height + 'px';
 
         if (svg.select()) {
-            deleteSet('doc', '.tooltip');
+            deleteSet('doc', '.tooltipItem');
         }
         resizeFnSvgHeight();
     }
@@ -364,7 +364,7 @@ function buildSvg() {
     zoomObj = d3.zoom()
         .scaleExtent([minScale, maxScale])
         .on("zoom", () => {
-            deleteSet('doc', '.tooltip');
+            deleteSet('doc', '.tooltipItem');
             zoomed();
         });
     svg.call(zoomObj);
@@ -386,13 +386,13 @@ function drawSet(currentSet, className = 'set') {
         .attr("cursor", "pointer")
         .attr("id", d => `_${d.name}`)
         .append('circle')
-        .attr('fill', (d) => d.name == pointName ? tooltip.checkedColor : tooltip.defaultColor)
+        .attr('fill', (d) => d.name == pointName ? tooltipItem.checkedColor : tooltipItem.defaultColor)
         .attr('cx', d => d.x_img)
         .attr('cy', d => d.y_img)
-        .attr('r', (d) => d.name == pointName ? tooltip.checkedR : tooltip.defaultR)
+        .attr('r', (d) => d.name == pointName ? tooltipItem.checkedR : tooltipItem.defaultR)
         .on('click', clickedOnPin)
-        .on('mousemove', (d) => toolTipFn(d.name))
-        .on('mouseleave', (d) => toolTipFn(d.name, false));
+        .on('mousemove', (d) => tooltipItemFn(d.name))
+        .on('mouseleave', (d) => tooltipItemFn(d.name, false));
 
 }
 
@@ -417,11 +417,11 @@ function reDesignAfterClick(selectedAttr, selector, oldValue, singleElem, newVal
 
 function clickedOnPin(d) {
     let targetEl = d3.event.target;
-    reDesignAfterClick('fill', 'circle', tooltip.defaultColor, targetEl, tooltip.checkedColor);
-    reDesignAfterClick('r', 'circle', tooltip.defaultR, targetEl, tooltip.checkedR);
+    reDesignAfterClick('fill', 'circle', tooltipItem.defaultColor, targetEl, tooltipItem.checkedColor);
+    reDesignAfterClick('r', 'circle', tooltipItem.defaultR, targetEl, tooltipItem.checkedR);
     pointName = d.name;
     switchPhoto360Observable.notify(pointName);
-    toolTipFn(pointName);
+    tooltipItemFn(pointName);
     deleteSet('svg', '.view');
     // buildViewCone()
 };
@@ -459,28 +459,28 @@ miniMapisLoad.subscribe(data => {
 
 function changeCurrentOnMiniMap() {
     let target = svg.select(`#_${pointName} circle`).node();
-    reDesignAfterClick('fill', 'circle', tooltip.defaultColor, target, tooltip.checkedColor);
-    reDesignAfterClick('r', 'circle', tooltip.defaultR, target, tooltip.checkedR);
+    reDesignAfterClick('fill', 'circle', tooltipItem.defaultColor, target, tooltipItem.checkedColor);
+    reDesignAfterClick('r', 'circle', tooltipItem.defaultR, target, tooltipItem.checkedR);
     deleteSet('svg', '.view');
     // buildViewCone();
 }
 
 
-function toolTipFn(id, flag = true) {
-    deleteSet('doc', '.tooltip');
+function tooltipItemFn(id, flag = true) {
+    deleteSet('doc', '.tooltipItem');
     if (!flag) return;
     let x = d3.event.pageX;
     let y = d3.event.pageY;
-    let posYDelta = tooltip.posYDelta;
-    let posXDelta = window.innerWidth - d3.event.pageX < 50 ? tooltip.posXDelta1 : tooltip.posXDelta2;
-    let tooltipElem = document.createElement('div');
-    tooltipElem.className = 'tooltip';
-    tooltipElem.innerHTML = id;
-    tooltipElem.style.left = (x + posXDelta) + 'px';
-    tooltipElem.style.top = (y + posYDelta) + 'px';
-    tooltipElem.style.backgroundColor = id == pointName ? tooltip.checkedColor : tooltip.defaultColor;
-    console.log(tooltipElem);
-    document.body.append(tooltipElem);
+    let posYDelta = tooltipItem.posYDelta;
+    let posXDelta = window.innerWidth - d3.event.pageX < 50 ? tooltipItem.posXDelta1 : tooltipItem.posXDelta2;
+    let tooltipItemElem = document.createElement('div');
+    tooltipItemElem.className = 'tooltipItem';
+    tooltipItemElem.innerHTML = id;
+    tooltipItemElem.style.left = (x + posXDelta) + 'px';
+    tooltipItemElem.style.top = (y + posYDelta) + 'px';
+    tooltipItemElem.style.backgroundColor = id == pointName ? tooltipItem.checkedColor : tooltipItem.defaultColor;
+    console.log(tooltipItemElem);
+    document.body.append(tooltipItemElem);
 }
 
 function changeViewAngle(fov) {

@@ -47,11 +47,7 @@
         document.body.classList.add('touch');
     });
 
-    // Use tooltip fallback mode on IE < 11.
-    if (bowser.msie && parseFloat(bowser.version) < 11) {
-        document.body.classList.add('tooltip-fallback');
-    }
-
+  
     // Viewer options.
     var viewerOpts = {
         controls: {
@@ -85,9 +81,7 @@
         var geometry = new Marzipano.CubeGeometry(sceneData.levels);
 
         var limiter = Marzipano.RectilinearView.limit.traditional(sceneData.faceSize, 180 * Math.PI / 180, 140 * Math.PI / 180);
-        var view = new Marzipano.RectilinearView(sceneData.initialViewParameters, limiter);
-
-        
+        var view = new Marzipano.RectilinearView(sceneData.initialViewParameters, limiter);        
 
         var scene = viewer.createScene({
             source: source,
