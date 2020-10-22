@@ -118,9 +118,9 @@
         mapListToggleElement.classList.toggle('checked-map');
 
         if (mapWrapper.classList.contains('enabled')) {
-            mapWrapper.style.transform = `translateX(100%)`;
+            mapWrapper.style.transform = `translateX(100%) translateX(40px)`;
         } else {
-            mapWrapper.style.transform = `translateX(0)`;
+            mapWrapper.style.transform = `translateX(-40px)`;
         }
         mapListToggleElement.classList.toggle('enabled');
     }
