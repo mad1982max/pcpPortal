@@ -126,7 +126,6 @@ img {
 }
 
 a.measurements:active {
-  /* box-shadow: 0 1px #666; */
   transform: translateY(2px);
 }
 
@@ -136,19 +135,13 @@ a.measurements:active {
   height: 40px;
 }
 
-.on {
-  display: none;
-}
-
+.enabled .icon.on,
 .off {
   display: block;
 }
 
-.enabled .icon.on {
-  display: block;
-}
-
-.enabled .icon.off {
+.enabled .icon.off,
+.on {
   display: none;
 }
 
@@ -219,7 +212,63 @@ a.measurements:active {
 
 .mapBtn:hover {
   background: #3399ff;
-  background: rgba(51, 153, 255, 0.8);
+  background: rgba(40, 131, 221, 0.8);
+}
+
+.range-value {
+  background: #4b4c4d;
+  color: rgb(248, 247, 247);
+  height: 30px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 3px;
+  transform: rotate(90deg);
+}
+
+.range-value:before {
+  position: absolute;
+  content: "";
+  height: 0;
+  width: 0;
+  border-bottom: 10px solid #4b4c4d;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  top: -5px;
+}
+
+input[type="range"] {
+  width: 138px;
+  -webkit-appearance: none;
+  height: 10px;
+  position: relative;
+  background-color: rgba(33, 116, 199, 0.5);
+  border-radius: 5px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: rgb(33, 116, 199);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.range-container {
+  position: relative;
+  top: 75px;
+  left: -70px;
+  width: 180px;
+  height: 40px;
+  transform: rotate(-90deg);
+  display: none;
+  align-items: center;
+  justify-content: space-between;
 }
 
 @media (hover: none) {

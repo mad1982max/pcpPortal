@@ -151,6 +151,9 @@ function onloadFn() {
   let pointCloudToggleicon = document.getElementById("pointCloudToggleicon");
   pointCloudToggleicon.addEventListener("click", togglePointCloud);
 
+  let rangeEl = document.querySelector(".range-slider");
+  rangeEl.addEventListener("input", rangeOnChange);
+
   let measurements = [...document.querySelectorAll(".measurements")];
   measurements.forEach((measureBtn) =>
     measureBtn.addEventListener("click", measurementsFn)
@@ -606,8 +609,14 @@ function returnFn() {
 
 function togglePointCloud() {
   let pointCloudToggleicon = document.getElementById("pointCloudToggleicon");
-  console.log("click");
   pointCloudToggleicon.classList.toggle("enabled");
+
+  let rangeContainer = document.querySelector(".range-container");
+  if (pointCloudToggleicon.classList.contains("enabled")) {
+    rangeContainer.style.display = "flex";
+  } else {
+    rangeContainer.style.display = "none";
+  }
 }
 
 function measurementsFn(e) {
@@ -616,4 +625,10 @@ function measurementsFn(e) {
   this.classList.add("checkedMeasure");
   let id = this.id;
   console.log("measuments:", id);
+}
+
+function rangeOnChange() {
+  console.log(this.value);
+  let rangeValueEl = document.querySelector(".range-value");
+  rangeValueEl.textContent = this.value;
 }
