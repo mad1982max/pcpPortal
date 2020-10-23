@@ -148,6 +148,14 @@ function onloadFn() {
   document.body.style.opacity = 1;
   makeResizableMapWrapper("#mapWrapper");
 
+  let pointCloudToggleicon = document.getElementById("pointCloudToggleicon");
+  pointCloudToggleicon.addEventListener("click", togglePointCloud);
+
+  let measurements = [...document.querySelectorAll(".measurements")];
+  measurements.forEach((measureBtn) =>
+    measureBtn.addEventListener("click", measurementsFn)
+  );
+
   let stairsUpBtn = document.getElementById("stairsUpBtn");
   let stairsDownBtn = document.getElementById("stairsDownBtn");
   stairsDownBtn.addEventListener("click", changeStairsFn.bind(null, -1));
@@ -448,7 +456,7 @@ function clickedOnPin(d) {
   switchPhoto360Observable.notify(pointName);
   tooltipItemFn(pointName);
   deleteSet("svg", ".view");
-  // buildViewCone()
+  buildViewCone();
 }
 
 function changePinFn(counter) {
@@ -468,18 +476,18 @@ clickNext.subscribe((pointName) => {
 });
 
 viewChangeObservable.subscribe(({ fov, yaw }) => {
-  // if (yaw !== oldYaw) {
-  //     changeViewDirection(yaw);
-  //     oldYaw = yaw;
-  // }
-  // if (fov !== oldFov) {
-  //     changeViewAngle(fov);
-  //     oldFov = fov;
-  // }
+  if (yaw !== oldYaw) {
+    changeViewDirection(yaw);
+    oldYaw = yaw;
+  }
+  if (fov !== oldFov) {
+    changeViewAngle(fov);
+    oldFov = fov;
+  }
 });
 
 miniMapisLoad.subscribe((data) => {
-  // buildViewCone();
+  buildViewCone();
   console.log("FLOOR EXISTS");
 });
 
@@ -500,7 +508,7 @@ function changeCurrentOnMiniMap() {
     tooltipItem.checkedR
   );
   deleteSet("svg", ".view");
-  // buildViewCone();
+  buildViewCone();
 }
 
 function tooltipItemFn(id, flag = true) {
@@ -594,4 +602,18 @@ function returnFn() {
     "&isAsideVis=0" +
     "&sub=" +
     currentSubLevelToShow;
+}
+
+function togglePointCloud() {
+  let pointCloudToggleicon = document.getElementById("pointCloudToggleicon");
+  console.log("click");
+  pointCloudToggleicon.classList.toggle("enabled");
+}
+
+function measurementsFn(e) {
+  let measurements = [...document.querySelectorAll(".measurements")];
+  measurements.forEach((measure) => measure.classList.remove("checkedMeasure"));
+  this.classList.add("checkedMeasure");
+  let id = this.id;
+  console.log("measuments:", id);
 }

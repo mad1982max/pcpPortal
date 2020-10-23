@@ -57,7 +57,6 @@ img {
   padding: 3px;
   width: 40px;
   height: 40px;
-  /* margin-top: 5px; */
 }
 
 .measurements img:hover {
@@ -117,25 +116,39 @@ img {
   overflow: hidden;
 }
 
-#mapToggleIcon .icon {
+.divider {
+  width: 40px;
+  height: 20px;
+}
+
+.checkedMeasure {
+  background: rgba(51, 153, 255, 0.8);
+}
+
+a.measurements:active {
+  /* box-shadow: 0 1px #666; */
+  transform: translateY(2px);
+}
+
+.icon {
   padding: 3px;
   width: 40px;
   height: 40px;
 }
 
-#mapToggleIcon .icon.on {
+.on {
   display: none;
 }
 
-#mapToggleIcon .icon.off {
+.off {
   display: block;
 }
 
-#mapToggleIcon.enabled .icon.on {
+.enabled .icon.on {
   display: block;
 }
 
-#mapToggleIcon.enabled .icon.off {
+.enabled .icon.off {
   display: none;
 }
 
