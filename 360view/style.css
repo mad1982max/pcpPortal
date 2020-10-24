@@ -126,7 +126,7 @@ img {
 }
 
 a.measurements:active {
-  transform: translateY(2px);
+  transform: scale(0.9);
 }
 
 .icon {
@@ -215,8 +215,8 @@ a.measurements:active {
 }
 
 .range-value {
-  background: #4b4c4d;
-  color: rgb(248, 247, 247);
+  background: #ffe940;
+  color: rgb(7, 7, 7);
   height: 30px;
   width: 35px;
   display: flex;
@@ -234,7 +234,7 @@ a.measurements:active {
   content: "";
   height: 0;
   width: 0;
-  border-bottom: 10px solid #4b4c4d;
+  border-bottom: 10px solid#ffe940;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   top: -5px;
@@ -245,14 +245,14 @@ input[type="range"] {
   -webkit-appearance: none;
   height: 10px;
   position: relative;
-  background-color: rgba(33, 116, 199, 0.5);
+  background-color: rgba(88, 154, 235, 0.4);
   border-radius: 5px;
   outline: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  background-color: rgb(33, 116, 199);
+  background-color: #292828;
   width: 25px;
   height: 25px;
   border-radius: 50%;

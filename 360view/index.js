@@ -27,7 +27,7 @@ let viewCone = {
   width: 130,
   height: 300,
   colorStart: "#00b359",
-  colorStop: "#0066ff",
+  colorStop: "#ffe940",
   opacity: 1,
   initRotateAnge: 180,
 };
@@ -639,7 +639,6 @@ function measurementsFn(e) {
 }
 
 function rangeOnChange() {
-  console.log(this.value);
   let rangeValueEl = document.querySelector(".range-value");
   rangeValueEl.textContent = this.value;
 }

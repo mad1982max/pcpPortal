@@ -57,7 +57,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
     <path
-       style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.5,1.5;stroke-dashoffset:1.2"
+       style="fill:none;stroke:#000000;stroke-width:2.1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.5,1.5;stroke-dashoffset:1.2"
        d="M 16,9.5000028 16,23.5"
        id="path3007"
        inkscape:connector-curvature="0" />
@@ -68,7 +68,7 @@
        inkscape:connector-curvature="0" />
     <path
        sodipodi:type="arc"
-       style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:1.09090912;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="path3807-4"
        sodipodi:cx="11"
        sodipodi:cy="22"
@@ -78,7 +78,7 @@
        transform="matrix(0.61111111,0,0,0.61111111,-22.222221,-8.9444445)" />
     <path
        sodipodi:type="arc"
-       style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:1.09090912;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="path3807"
        sodipodi:cx="11"
        sodipodi:cy="22"
@@ -94,7 +94,7 @@
        sodipodi:cy="22"
        sodipodi:cx="11"
        id="path3003"
-       style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:1.09090912;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ffe940;fill-opacity:1;stroke:#000000;stroke-width:2.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        sodipodi:type="arc" />
     <path
        transform="matrix(0.61111111,0,0,0.61111111,9.2777778,11.555556)"
@@ -104,7 +104,7 @@
        sodipodi:cy="22"
        sodipodi:cx="11"
        id="path3005"
-       style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:1.09090912;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ffe940;fill-opacity:1;stroke:#000000;stroke-width:2.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        sodipodi:type="arc" />
   </g>
 </svg>
