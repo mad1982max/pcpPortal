@@ -110,20 +110,27 @@ function makeResizableMapWrapper(div) {
   resizer.addEventListener("touchstart", touchStart);
 
   function resizeWrapperDiv(e) {
-    let windheight = window.innerHeight;
+    let windWidth = window.innerWidth;
+    let windHeight = window.innerHeight;
     let currentXpos;
+
     if (e.constructor.name === "TouchEvent") {
       currentXpos = e.touches[0].pageX > 0 ? e.touches[0].pageX : 0;
     } else if (e.constructor.name === "MouseEvent") {
       currentXpos = e.pageX > 0 ? e.pageX : 0;
     }
+
     let width = original_width - (currentXpos - original_mouse_x);
-
     if (width < mapInit.minWidth) width = mapInit.minWidth; // minWidth
-    const height = (width / mapInit.imgWidth) * mapInit.imgHeight;
+    let height = (width / mapInit.imgWidth) * mapInit.imgHeight;
 
-    if (height > windheight) {
-      height = windheight;
+    if (width >= windWidth - 40) {
+      width = windWidth - 40;
+      height = (width / mapInit.imgWidth) * mapInit.imgHeight;
+    }
+
+    if (height >= windHeight - 40) {
+      height = windHeight - 40;
       width = (height * mapInit.imgWidth) / mapInit.imgHeight;
     }
 
@@ -189,19 +196,23 @@ function resizeWindowFn() {
     window.innerWidth ||
     document.documentElement.clientWidth ||
     document.body.clientWidth;
+
+  let windowHeight = window.innerHeight;
+
   const mapList = document.querySelector("#mapWrapper");
   let mapListWidth = mapList.offsetWidth;
+  let mapListHeight = mapList.offsetHeight;
 
-  if (mapListWidth >= windowWidth) {
-    if (windowWidth < mapInit.minWidth) {
-      const height = (mapInit.minWidth / mapInit.imgWidth) * mapInit.imgHeight;
-      mapList.style.width = mapInit.minWidth + "px";
-      mapList.style.height = height + "px";
-    } else {
-      const height = (windowWidth / mapInit.imgWidth) * mapInit.imgHeight;
-      mapList.style.width = windowWidth + "px";
-      mapList.style.height = height + "px";
-    }
+  if (mapListWidth >= windowWidth - 40) {
+    const height = ((windowWidth - 40) / mapInit.imgWidth) * mapInit.imgHeight;
+    mapList.style.width = windowWidth - 40 + "px";
+    mapList.style.height = height + "px";
+  }
+
+  if (mapListHeight >= windowHeight - 40) {
+    mapList.style.height = windowHeight - 40 + "px";
+    const width = ((windowHeight - 40) * mapInit.imgWidth) / mapInit.imgHeight;
+    mapList.style.width = width + "px";
   }
 
   if (svg) {

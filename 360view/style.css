@@ -147,7 +147,6 @@ a.measurements:active {
 
 #mapWrapper {
   width: 30%;
-  max-width: 800px;
   position: absolute;
   z-index: 10;
   margin-top: 40px;
@@ -155,8 +154,8 @@ a.measurements:active {
   right: 0;
   transform: translateX(100%);
   -webkit-transform: translateX(100%);
-  max-width: calc(100% - 50px);
-  max-height: calc(100% - 50px);
+  /* max-width: calc(100% - 50px);
+  max-height: calc(100% - 50px); */
   background-color: rgb(58, 68, 84);
   background-color: rgba(58, 68, 84, 0.5);
   border-radius: 5px;
