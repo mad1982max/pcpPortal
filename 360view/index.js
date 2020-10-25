@@ -110,8 +110,6 @@ function makeResizableMapWrapper(div) {
   resizer.addEventListener("touchstart", touchStart);
 
   function resizeWrapperDiv(e) {
-    let windWidth = window.innerWidth;
-    let windHeight = window.innerHeight;
     let currentXpos;
 
     if (e.constructor.name === "TouchEvent") {
@@ -124,18 +122,10 @@ function makeResizableMapWrapper(div) {
     if (width < mapInit.minWidth) width = mapInit.minWidth; // minWidth
     let height = (width / mapInit.imgWidth) * mapInit.imgHeight;
 
-    if (width >= windWidth - 40) {
-      width = windWidth - 40;
-      height = (width / mapInit.imgWidth) * mapInit.imgHeight;
-    }
+    let { widthEl, heightEl } = defineWidthHeightrestrict(width, height);
 
-    if (height >= windHeight - 40) {
-      height = windHeight - 40;
-      width = (height * mapInit.imgWidth) / mapInit.imgHeight;
-    }
-
-    element.style.width = width + "px";
-    element.style.height = height + "px";
+    element.style.width = widthEl + "px";
+    element.style.height = heightEl + "px";
 
     if (svg.select()) {
       deleteSet("doc", ".tooltipItem");
@@ -150,6 +140,33 @@ function makeResizableMapWrapper(div) {
 }
 
 window.onload = onloadFn;
+
+function defineWidthHeightrestrict(widthEl, heightEl) {
+  let windowWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
+
+  let windowHeight =
+    window.innerHeight ||
+    document.documentElement.clientHeight ||
+    document.body.clientHeight;
+
+  let headerHeight = document.querySelector(".header").offsetHeight || 0;
+  let asideWidth = document.querySelector(".aside-menu").offsetWidth || 0;
+
+  if (widthEl >= windowWidth - asideWidth) {
+    widthEl = windowWidth - asideWidth;
+    heightEl = (widthEl / mapInit.imgWidth) * mapInit.imgHeight;
+  }
+
+  if (heightEl >= windowHeight - headerHeight) {
+    heightEl = windowHeight - headerHeight;
+    widthEl = (heightEl * mapInit.imgWidth) / mapInit.imgHeight;
+  }
+
+  return { widthEl, heightEl };
+}
 
 function onloadFn() {
   document.body.style.opacity = 1;
@@ -192,28 +209,17 @@ function onloadFn() {
 }
 
 function resizeWindowFn() {
-  let windowWidth =
-    window.innerWidth ||
-    document.documentElement.clientWidth ||
-    document.body.clientWidth;
-
-  let windowHeight = window.innerHeight;
-
   const mapList = document.querySelector("#mapWrapper");
   let mapListWidth = mapList.offsetWidth;
   let mapListHeight = mapList.offsetHeight;
 
-  if (mapListWidth >= windowWidth - 40) {
-    const height = ((windowWidth - 40) / mapInit.imgWidth) * mapInit.imgHeight;
-    mapList.style.width = windowWidth - 40 + "px";
-    mapList.style.height = height + "px";
-  }
+  let { widthEl, heightEl } = defineWidthHeightrestrict(
+    mapListWidth,
+    mapListHeight
+  );
 
-  if (mapListHeight >= windowHeight - 40) {
-    mapList.style.height = windowHeight - 40 + "px";
-    const width = ((windowHeight - 40) * mapInit.imgWidth) / mapInit.imgHeight;
-    mapList.style.width = width + "px";
-  }
+  mapList.style.width = widthEl + "px";
+  mapList.style.height = heightEl + "px";
 
   if (svg) {
     resizeFnSvgHeight();
