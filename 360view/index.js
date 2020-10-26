@@ -130,7 +130,7 @@ function makeResizableMapWrapper(div) {
     if (svg.select()) {
       deleteSet("doc", ".tooltipItem");
     }
-    resizeFnSvgHeight();
+    //resizeFnSvgHeight();
   }
 
   function stopResize() {
@@ -222,7 +222,7 @@ function resizeWindowFn() {
   mapList.style.height = heightEl + "px";
 
   if (svg) {
-    resizeFnSvgHeight();
+    //resizeFnSvgHeight();
   }
 }
 
@@ -334,7 +334,7 @@ function buildSvg() {
     .attr("class", "svgContainer")
     .attr("viewBox", [0, 0, mapInit.imgWidth, mapInit.imgHeight])
     .attr("width", "100%")
-    .attr("height", freeHeight);
+    .attr("height", "100%");
 
   let defs = svg.append("defs");
 
