@@ -152,8 +152,8 @@ function defineWidthHeightrestrict(widthEl, heightEl) {
     document.documentElement.clientHeight ||
     document.body.clientHeight;
 
-  let headerHeight = document.querySelector(".header").offsetHeight || 0;
-  let asideWidth = document.querySelector(".aside-menu").offsetWidth || 0;
+  let headerHeight = document.getElementsByTagName("header").offsetHeight || 0;
+  let asideWidth = 0;//document.querySelector(".aside-menu").offsetWidth || 0;
 
   if (widthEl >= windowWidth - asideWidth) {
     widthEl = windowWidth - asideWidth;
@@ -172,7 +172,7 @@ function onloadFn() {
   document.body.style.opacity = 1;
   makeResizableMapWrapper("#map-wrapper");
 
-  let pointCloudToggleicon = document.getElementById("pointCloudToggleicon");
+  /*let pointCloudToggleicon = document.getElementById("pointCloudToggleicon");
   pointCloudToggleicon.addEventListener("click", togglePointCloud);
 
   let rangeEl = document.querySelector(".range-slider");
@@ -181,7 +181,7 @@ function onloadFn() {
   let measurements = [...document.querySelectorAll(".measurements")];
   measurements.forEach((measureBtn) =>
     measureBtn.addEventListener("click", measurementsFn)
-  );
+  );//*/
 
   let stairsUpBtn = document.getElementById("stairsUpBtn");
   let stairsDownBtn = document.getElementById("stairsDownBtn");
