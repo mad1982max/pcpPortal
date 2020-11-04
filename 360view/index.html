@@ -151,7 +151,6 @@
 		profiles.push(new PointProfile(config, '189', new THREE.Vector3(160.23, 227, 29.35), new THREE.Euler(-0.4,-1.7,-121.1)));
 
 		let sceneControl = new SceneControl(config);
-		let uiControl = new UIControl(sceneControl);
 		window.viewer = sceneControl.viewer; // potree can't work without it
 	</script>
   </body>
@@ -192,5 +191,6 @@
 
 	  let profile = sceneControl.getProfileByQuery();
 	  switchPhoto360Observable.notify(profile ? profile.name : profiles[2].name);
+	  let uiControl = new UIControl(sceneControl);
   </script>
 </html>

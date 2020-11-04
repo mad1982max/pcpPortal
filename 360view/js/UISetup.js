@@ -404,8 +404,10 @@
 
     function UIControl(sceneControl){
         Validator.validateInstance(sceneControl, SceneControl);
+        (document.head || document.getElementsByTagName('head')[0]).insertAdjacentHTML("beforeend", '<style></style>');
         Object.defineProperties(this, {
-            sceneControl: { value: sceneControl }
+            sceneControl: { value: sceneControl },
+            styleSheet: { value: document.styleSheets[document.styleSheets.length - 1] }
         });
         this.pointBudgetSliderSetup();
         this.pointCloudVisibilityControlSetup();
@@ -418,7 +420,6 @@
         }
         this.potreeUIVisibilityControlSetup();
         this.customUIToggleSetup();
-        //this.debugDialogBoxSetup();
         this.potreeUISetup();
         this.sphereVisibilityControlSetup();
         this.addRangeSlider();
@@ -448,11 +449,12 @@
             });
         },
         potreeUIVisibilityControlSetup: function () {
+            const styleSheet = this.styleSheet;
             $('#potreeUIVisibilityControl>label>input').change(function() {
                 let visible = this.checked;
                 $('#potree_render_area').css("left", "0px");
-                $('#potree_sidebar_container').showHide(visible);
-                $('#potree_render_area>img').showHide(visible);
+                if (styleSheet.rules.length > 0) styleSheet.removeRule(0);
+                if (!visible) styleSheet.insertRule('#potree_sidebar_container,#potree_render_area>img{display:none;}');
             });
         },
         customUIToggleSetup: function () {
@@ -466,24 +468,9 @@
             })
             showHideButton.click();
         },
-        debugDialogBoxSetup: function () {
-            const div = document.createElement('div');
-            const p1 = document.createElement('p');
-            const p2 = document.createElement('p');
-            div.append(p1, p2);
-            $(div).dialog({position:{my: "left bottom", at: "left bottom", of: window }});
-
-            this.sceneControl.addEventListener('ClickNoMove', function (e) {
-                let position = e.position;
-                $(p1).text('x: ' + position.x);
-                $(p2).text('y: ' + position.y);
-            });
-        },
         potreeUISetup: function () {
-            this.sceneControl.viewer.loadGUI(() => {
-                $('#potree_sidebar_container').hide();
-                $('#potree_render_area>img').hide();
-            });
+            this.styleSheet.insertRule("#potree_sidebar_container,#potree_render_area>img{display:none;}");
+            this.sceneControl.viewer.loadGUI();
         },
         sphereVisibilityControlSetup: function () {
             $('#sphereVisibilityControl>label>input').change(function() {
