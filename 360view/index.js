@@ -221,9 +221,9 @@ function resizeWindowFn() {
   mapList.style.width = widthEl + "px";
   mapList.style.height = heightEl + "px";
 
-  if (svg) {
-    //resizeFnSvgHeight();
-  }
+  // if (svg) {
+  //resizeFnSvgHeight();
+  // }
 }
 
 function initMapWidth() {
@@ -328,7 +328,7 @@ function changePinFn(counter) {
 }
 
 function buildSvg() {
-  let freeHeight = getWrapperDivHeight();
+  //let freeHeight = getWrapperDivHeight();
   svg = d3.select("#wrapper").append("svg");
   svg
     .attr("class", "svgContainer")
