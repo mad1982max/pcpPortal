@@ -262,14 +262,14 @@ img {
 #resizeMapBtn:hover {
     cursor: nesw-resize;
 }
-#map-list{
+#map-wrapper{
     position: absolute;
     right: 0;
     top: 100%;
     background-color: #3a445480;
     transition: transform 0.4s ease-in-out;
 }
-#map-toggle.enabled>#map-list{
+#map-toggle.enabled>#map-wrapper{
     transform: translateX(100%);
 }
 
