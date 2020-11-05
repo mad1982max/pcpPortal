@@ -268,6 +268,8 @@ img {
     top: 100%;
     background-color: #3a445480;
     transition: transform 0.4s ease-in-out;
+    min-width: 300px;
+    min-height: 200px;
 }
 #map-toggle.enabled>#map-wrapper{
     transform: translateX(100%);
