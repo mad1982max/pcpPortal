@@ -468,9 +468,79 @@
             })
             showHideButton.click();
         },
+        createMeasurementIcon: function (iconName, onclickCallback){
+            Validator.validateString(iconName);
+            Validator.validateFunction(onclickCallback);
+
+            const element = document.createElement('div');
+            element.classList.add('button-like');
+            element.addEventListener('click', onclickCallback);
+            element.title = iconName;
+            const img = document.createElement('img');
+            img.src = '/assets/img/icons/' + iconName + '.svg';
+            element.append(img);
+            return element;
+        },
         potreeUISetup: function () {
-            this.styleSheet.insertRule("#potree_sidebar_container,#potree_render_area>img{display:none;}");
-            this.sceneControl.viewer.loadGUI();
+            // these two lines are just for dev purposes
+            //this.styleSheet.insertRule("#potree_sidebar_container,#potree_render_area>img{display:none;}");
+            //this.sceneControl.viewer.loadGUI();
+
+            const measurements = document.getElementById('measurements');
+
+            measurements.append(
+                this.createMeasurementIcon('angle', function(){
+                        viewer.measuringTool.startInsertion({
+                            showDistances: false,
+                            showAngles: true,
+                            showArea: false,
+                            closed: true,
+                            maxMarkers: 3,
+                            name: "Angle"});
+                    }
+                ),
+                this.createMeasurementIcon('point', function(){
+                        viewer.measuringTool.startInsertion({
+                            showDistances: false,
+                            showAngles: false,
+                            showCoordinates: true,
+                            showArea: false,
+                            closed: true,
+                            maxMarkers: 1,
+                            name: "Point"});
+                    }
+                ),
+                this.createMeasurementIcon('distance', function(){
+                        viewer.measuringTool.startInsertion({
+                            showDistances: true,
+                            showArea: false,
+                            closed: false,
+                            name: "Distance"});
+                    }
+                ),
+                this.createMeasurementIcon('height', function(){
+                        viewer.measuringTool.startInsertion({
+                            showDistances: false,
+                            showHeight: true,
+                            showArea: false,
+                            closed: false,
+                            maxMarkers: 2,
+                            name: "Height"});
+                    }
+                ),
+                this.createMeasurementIcon('area', function(){
+                        viewer.measuringTool.startInsertion({
+                            showDistances: true,
+                            showArea: true,
+                            closed: true,
+                            name: "Area"});
+                    }
+                ),
+                this.createMeasurementIcon('reset_tools', function(){
+                        viewer.scene.removeAllMeasurements();
+                    }
+                )
+            );
         },
         sphereVisibilityControlSetup: function () {
             $('#sphereVisibilityControl>label>input').change(function() {

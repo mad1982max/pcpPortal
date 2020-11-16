@@ -264,20 +264,22 @@ img {
 }
 #map-wrapper{
     position: absolute;
-    right: 0;
-    top: 100%;
+    right: 100%;
+    top: 0;
     background-color: #3a445480;
     transition: transform 0.4s ease-in-out;
     min-width: 300px;
-    min-height: 200px;
+    min-height: 185px;
+    max-width: calc(100vw - 100%);
+    max-height: 100%;
 }
 #map-toggle.enabled>#map-wrapper{
-    transform: translateX(100%);
+    transform: translateX(calc(100% + 4rem));
 }
 
-header.top{
+header.prime{
     min-height: 2.5rem;
-    background-color: #ddda;
+    color: #333;
     position: fixed;
     left: 0;
     right: 0;
@@ -286,7 +288,9 @@ header.top{
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    color: #333;
+}
+header.prime, aside.prime{
+    background-color: #ddda;
 }
 header>.arrows{
     display: flex;
@@ -302,7 +306,6 @@ header i{
     justify-content: center;
     align-items: center;
     padding: 5px;
-    width: 3rem;
 }
 .point-name-display{
     margin: auto 0;
@@ -310,4 +313,26 @@ header i{
 }
 body{
     font-family: Arial, sans-serif;
+}
+#right-placeholder{
+    width: 3rem;
+    position: relative;
+}
+aside.prime{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    height: calc(100vh - 100%);
+}
+.vertical-placeholder{
+    height: 20px;
+}
+.checkbox-like img.checkbox-reverse,
+.checkbox-like.checked img{
+    display: none;
+}
+.checkbox-like.checked img.checkbox-reverse,
+.checkbox-like img{
+    display: initial;
 }
