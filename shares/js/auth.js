@@ -8,6 +8,11 @@
     const rejectCallbacks = [];
     const commonCallbacks = [];
 
+    const loginData = {'admin':{'password':'bixit', 'token':'3050cfad-2354-4cfe-8e86-40b9de3ddecb'}};
+    Object.freeze(loginData);
+    Object.values(loginData).forEach(function(o){Object.freeze(o);});
+    Object.defineProperty(window, 'loginData', {value: loginData});
+
     Object.defineProperty(window, 'auth_status_object', {
         value: Object.defineProperties({}, {
             'succesfuly_logged_in': { // auth status accessor
@@ -44,7 +49,7 @@
                 value: function () {
                     const token = window.localStorage.getItem('token');
 
-                    const xhr = new XMLHttpRequest();
+                    /*const xhr = new XMLHttpRequest();
                     xhr.open('POST', authUrl, true);
                     xhr.responseType = 'json';
 
@@ -56,7 +61,10 @@
                         success = (xhr.status === 200);
                         (success ? resolveCallbacks : rejectCallbacks).forEach(function (callback) { callback(); });
                         commonCallbacks.forEach(function (callback) { callback(success); });
-                    }
+                    }*/
+                    success = Object.values(loginData).some(function(value){if(value.token === token)return true;});
+                    (success ? resolveCallbacks : rejectCallbacks).forEach(function (callback) { callback(); });
+                    commonCallbacks.forEach(function (callback) { callback(success); });
                 }
             }
         })
