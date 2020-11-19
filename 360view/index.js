@@ -154,7 +154,7 @@ function defineWidthHeightRestrict(widthEl, heightEl) {
     document.body.clientHeight;
 
   let headerHeight = document.querySelector(".header").offsetHeight || 0;
-  let asideWidth = document.querySelector(".aside-menu").offsetWidth || 0;
+  let asideWidth = document.querySelector(".aside-mapBtn").offsetWidth || 0;
 
   if (widthEl >= windowWidth - asideWidth) {
     widthEl = windowWidth - asideWidth;
@@ -199,7 +199,7 @@ function onloadFn() {
 }
 
 function resizeWindowFn() {
-  let mapBtnGroup = document.querySelector(".aside-menu");
+  let mapBtnGroup = document.querySelector(".aside-mapBtn");
   let toggleMapBtn = document.querySelector(".mapToggleIcon");
   const mapWrapper = document.querySelector("#mapWrapper");
 

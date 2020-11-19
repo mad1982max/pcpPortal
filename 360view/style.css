@@ -133,7 +133,7 @@ button:active {
   transform: scale(0.95);
 }
 
-.aside-menu {
+.aside-mapBtn {
   position: absolute;
   display: flex;
   top: 0;
@@ -262,7 +262,7 @@ button:active {
     line-height: 47px;
   }
 
-  .aside-menu {
+  .aside-mapBtn {
     height: 47px;
   }
 
@@ -297,7 +297,7 @@ button:active {
     height: 52px;
   }
 
-  .aside-menu {
+  .aside-mapBtn {
     height: 52px;
   }
 

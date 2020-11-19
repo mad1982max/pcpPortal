@@ -107,7 +107,7 @@
   toggleMapList();
 
   function toggleMapList() {
-    let asideMenu = document.querySelector(".aside-menu");
+    let asideMenu = document.querySelector(".aside-mapBtn");
     let mapToggleIcon = document.querySelector(".mapToggleIcon");
     console.log("mapToggleIcon", mapToggleIcon.offsetWidth);
 
