@@ -13,6 +13,8 @@ let prevClusterPointId = 0;
 let singlePinColor = "#FF2A2A";
 let clusterPinColor = "#00BD63";
 
+let dividerWidth = 2;
+
 let tooltipItem = {
   defaultColor: "#FF2A2A",
   checkedColor: "#00b359",
@@ -27,13 +29,13 @@ let viewCone = {
   width: 130,
   height: 300,
   colorStart: "#00b359",
-  colorStop: "#ffe940",
+  colorStop: "#3399ff",
   opacity: 1,
   initRotateAnge: 180,
 };
 
 const mapInit = {
-  widthRatioToWind: 0.3,
+  widthRatioToWind: 0.6,
   imgWidth: 3000,
   imgHeight: 1850,
   minApearWidth: 400,
@@ -119,10 +121,10 @@ function makeResizableMapWrapper(div) {
     }
 
     let width = original_width - (currentXpos - original_mouse_x);
-    if (width < mapInit.minWidth) width = mapInit.minWidth; // minWidth
+    if (width < mapInit.minWidth) width = mapInit.minWidth;
     let height = (width / mapInit.imgWidth) * mapInit.imgHeight;
 
-    let { widthEl, heightEl } = defineWidthHeightrestrict(width, height);
+    let { widthEl, heightEl } = defineWidthHeightRestrict(width, height);
 
     element.style.width = widthEl + "px";
     element.style.height = heightEl + "px";
@@ -130,7 +132,6 @@ function makeResizableMapWrapper(div) {
     if (svg.select()) {
       deleteSet("doc", ".tooltipItem");
     }
-    //resizeFnSvgHeight();
   }
 
   function stopResize() {
@@ -141,7 +142,7 @@ function makeResizableMapWrapper(div) {
 
 window.onload = onloadFn;
 
-function defineWidthHeightrestrict(widthEl, heightEl) {
+function defineWidthHeightRestrict(widthEl, heightEl) {
   let windowWidth =
     window.innerWidth ||
     document.documentElement.clientWidth ||
@@ -172,17 +173,6 @@ function onloadFn() {
   document.body.style.opacity = 1;
   makeResizableMapWrapper("#mapWrapper");
 
-  let pointCloudToggleicon = document.getElementById("pointCloudToggleicon");
-  pointCloudToggleicon.addEventListener("click", togglePointCloud);
-
-  let rangeEl = document.querySelector(".range-slider");
-  rangeEl.addEventListener("input", rangeOnChange);
-
-  let measurements = [...document.querySelectorAll(".measurements")];
-  measurements.forEach((measureBtn) =>
-    measureBtn.addEventListener("click", measurementsFn)
-  );
-
   let stairsUpBtn = document.getElementById("stairsUpBtn");
   let stairsDownBtn = document.getElementById("stairsDownBtn");
   stairsDownBtn.addEventListener("click", changeStairsFn.bind(null, -1));
@@ -209,21 +199,22 @@ function onloadFn() {
 }
 
 function resizeWindowFn() {
-  const mapList = document.querySelector("#mapWrapper");
-  let mapListWidth = mapList.offsetWidth;
-  let mapListHeight = mapList.offsetHeight;
+  let mapBtnGroup = document.querySelector(".aside-menu");
+  let toggleMapBtn = document.querySelector(".mapToggleIcon");
+  const mapWrapper = document.querySelector("#mapWrapper");
 
-  let { widthEl, heightEl } = defineWidthHeightrestrict(
-    mapListWidth,
-    mapListHeight
+  let mapWrapperWidth = mapWrapper.offsetWidth;
+  let mapWrapperHeight = mapWrapper.offsetHeight;
+
+  let { widthEl, heightEl } = defineWidthHeightRestrict(
+    mapWrapperWidth,
+    mapWrapperHeight
   );
 
-  mapList.style.width = widthEl + "px";
-  mapList.style.height = heightEl + "px";
+  mapWrapper.style.width = widthEl + "px";
+  mapWrapper.style.height = heightEl + "px";
 
-  // if (svg) {
-  //resizeFnSvgHeight();
-  // }
+  mapBtnGroup.style.transform = `translateX(-${toggleMapBtn.offsetWidth}px)`;
 }
 
 function initMapWidth() {
@@ -237,15 +228,15 @@ function initMapWidth() {
       ? windowWidth * mapInit.widthRatioToWind
       : mapInit.minApearWidth;
 
-  let asideWrapper = document.querySelector("#mapWrapper");
-  asideWrapper.style.width = mapWidth + "px";
-  asideWrapper.style.height =
+  let mapWrapper = document.querySelector("#mapWrapper");
+  mapWrapper.style.width = mapWidth + "px";
+  mapWrapper.style.height =
     (mapWidth / mapInit.imgWidth) * mapInit.imgHeight + "px";
 }
 
 function getWrapperDivHeight() {
-  const mapList = document.querySelector("#mapWrapper");
-  return mapList.offsetHeight;
+  const mapWrapper = document.querySelector("#mapWrapper");
+  return mapWrapper.offsetHeight;
 }
 
 function resizeFnSvgHeight() {
@@ -328,7 +319,6 @@ function changePinFn(counter) {
 }
 
 function buildSvg() {
-  //let freeHeight = getWrapperDivHeight();
   svg = d3.select("#wrapper").append("svg");
   svg
     .attr("class", "svgContainer")
@@ -552,6 +542,7 @@ function tooltipItemFn(id, flag = true) {
 }
 
 function changeViewAngle(fov) {
+  console.log(fov);
   viewCone.width = (viewCone.height * Math.tan(fov / 2)) / 1.5; // devider 1.5 for better view
   if (pointsOnLevel) {
     let point = pointsOnLevel.find((point) => point.name == pointName);

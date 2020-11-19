@@ -2,6 +2,8 @@
   var Marzipano = window.Marzipano;
   var bowser = window.bowser;
 
+  let dividerWidth = 2;
+
   var APP_DATA = {
     scenes: tails,
     name: "Project Title",
@@ -89,7 +91,7 @@
   }
 
   // Set handler for scene list toggle.
-  mapListToggleElement.addEventListener("click", togglemapList);
+  mapListToggleElement.addEventListener("click", toggleMapList);
 
   function switchScene(scene) {
     scene.view.setParameters(scene.data.initialViewParameters);
@@ -102,17 +104,25 @@
   }
 
   //***------------- */
-  togglemapList();
+  toggleMapList();
 
-  function togglemapList() {
-    let asideMenuWidth = document.querySelector(".aside-menu").offsetWidth;
+  function toggleMapList() {
+    let asideMenu = document.querySelector(".aside-menu");
+    let mapToggleIcon = document.querySelector(".mapToggleIcon");
+    console.log("mapToggleIcon", mapToggleIcon.offsetWidth);
+
     mapWrapper.classList.toggle("enabled");
+    asideMenu.classList.toggle("enabled");
+
     mapListToggleElement.classList.toggle("checked-map");
 
     if (mapWrapper.classList.contains("enabled")) {
-      mapWrapper.style.transform = `translateX(100%) translateX(${asideMenuWidth}px)`;
+      mapWrapper.style.transform = "translateX(100%)";
+      asideMenu.style.transform = "translateX(100%)";
     } else {
-      mapWrapper.style.transform = `translateX(-${asideMenuWidth}px)`;
+      mapWrapper.style.transform = "translateX(0px)";
+      // asideMenu.style.transform = `translateX(-${mapToggleIcon.offsetWidth})px`;
+      asideMenu.style.transform = `translateX(-${mapToggleIcon.offsetWidth}px)`;
     }
     mapListToggleElement.classList.toggle("enabled");
   }
