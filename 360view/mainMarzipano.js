@@ -107,22 +107,23 @@
   toggleMapList();
 
   function toggleMapList() {
-    let asideMenu = document.querySelector(".aside-mapBtn");
+    let asideMapBtn = document.querySelector(".aside-mapBtn");
     let mapToggleIcon = document.querySelector(".mapToggleIcon");
     console.log("mapToggleIcon", mapToggleIcon.offsetWidth);
 
     mapWrapper.classList.toggle("enabled");
-    asideMenu.classList.toggle("enabled");
+    asideMapBtn.classList.toggle("enabled");
 
     mapListToggleElement.classList.toggle("checked-map");
 
     if (mapWrapper.classList.contains("enabled")) {
       mapWrapper.style.transform = "translateX(100%)";
-      asideMenu.style.transform = "translateX(100%)";
+      asideMapBtn.style.transform = "translateX(100%)";
+      asideMapBtn.style.opacity = "0";
     } else {
       mapWrapper.style.transform = "translateX(0px)";
-      // asideMenu.style.transform = `translateX(-${mapToggleIcon.offsetWidth})px`;
-      asideMenu.style.transform = `translateX(-${mapToggleIcon.offsetWidth}px)`;
+      asideMapBtn.style.opacity = "1";
+      asideMapBtn.style.transform = `translateX(-${mapToggleIcon.offsetWidth}px)`;
     }
     mapListToggleElement.classList.toggle("enabled");
   }

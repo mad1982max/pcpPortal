@@ -134,6 +134,7 @@ button:active {
 }
 
 .aside-mapBtn {
+  opacity: 0;
   position: absolute;
   display: flex;
   top: 0;
