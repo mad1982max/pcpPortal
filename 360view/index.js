@@ -154,10 +154,9 @@ function defineWidthHeightRestrict(widthEl, heightEl) {
     document.body.clientHeight;
 
   let headerHeight = document.querySelector(".header").offsetHeight || 0;
-  let asideWidth = document.querySelector(".aside-mapBtn").offsetWidth || 0;
 
-  if (widthEl >= windowWidth - asideWidth) {
-    widthEl = windowWidth - asideWidth;
+  if (widthEl >= windowWidth) {
+    widthEl = windowWidth;
     heightEl = (widthEl / mapInit.imgWidth) * mapInit.imgHeight;
   }
 
