@@ -6,19 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <title>Dolwin Alpha</title>
     <script src="./shares/js/auth.js"></script>
-    <script>
-      auth_status_object.add_auth_callback(function (resolved) {
-        let authContainer = document.getElementById("auth-container").classList;
-        let blurContainer = document.querySelector(".global").classList;
-        if (resolved) {
-          authContainer.add("hide");
-          blurContainer.remove("blur");
-        } else {
-          authContainer.remove("hide");
-          blurContainer.add("blur");
-        }
-      });
-    </script>
+
     <link href="./vendors/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./shares/css/header_footer.css" />
     <link rel="stylesheet" href="./main.css" />
@@ -169,6 +157,20 @@
         >
       </div>
     </div>
+
+    <script>
+      auth_status_object.add_auth_callback(function (resolved) {
+        let authContainer = document.getElementById("auth-container").classList;
+        let blurContainer = document.querySelector(".global").classList;
+        if (resolved) {
+          authContainer.add("hide");
+          blurContainer.remove("blur");
+        } else {
+          authContainer.remove("hide");
+          blurContainer.add("blur");
+        }
+      });
+    </script>
 
     <script>
       auth_status_object.add_auth_callback(function (resolved) {
