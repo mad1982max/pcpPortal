@@ -6552,7 +6552,7 @@
                         deltaX: 0,
                         deltaZ: 0,
                         timeStamp: e.timeStamp || Date.now(),
-                        preventDefault: e.preventDefault.bind(e)
+                        preventDefault: e.preventDefault.bind(e),
                     };
                     return r.deltaY = -.025 * e.wheelDelta, e.wheelDeltaX && (r.deltaX = -.025 * e.wheelDeltaX), t(r)
                 }

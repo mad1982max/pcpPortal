@@ -109,7 +109,7 @@ function makeResizableMapWrapper(div) {
     window.addEventListener("touchend", stopResize);
   }
   resizer.addEventListener("mousedown", touchStart);
-  resizer.addEventListener("touchstart", touchStart);
+  resizer.addEventListener("touchstart", touchStart, { passive: true });
 
   function resizeWrapperDiv(e) {
     let currentXpos;
@@ -169,6 +169,11 @@ function defineWidthHeightRestrict(widthEl, heightEl) {
 }
 
 function onloadFn() {
+  alert(
+    `window.innerWidth:${window.innerWidth}, dpr: ${
+      window.devicePixelRatio
+    }, header:${document.querySelector(".header").offsetHeight}`
+  );
   document.body.style.opacity = 1;
   makeResizableMapWrapper("#mapWrapper");
 
@@ -497,7 +502,7 @@ viewChangeObservable.subscribe(({ fov, yaw }) => {
 
 miniMapisLoad.subscribe((data) => {
   buildViewCone();
-  console.log("FLOOR EXISTS");
+  console.log("FLOOR EXISTS, show map");
 });
 
 function changeCurrentOnMiniMap() {
@@ -541,7 +546,6 @@ function tooltipItemFn(id, flag = true) {
 }
 
 function changeViewAngle(fov) {
-  console.log(fov);
   viewCone.width = (viewCone.height * Math.tan(fov / 2)) / 1.5; // devider 1.5 for better view
   if (pointsOnLevel) {
     let point = pointsOnLevel.find((point) => point.name == pointName);

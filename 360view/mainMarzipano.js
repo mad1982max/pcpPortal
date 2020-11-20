@@ -2,8 +2,6 @@
   var Marzipano = window.Marzipano;
   var bowser = window.bowser;
 
-  let dividerWidth = 2;
-
   var APP_DATA = {
     scenes: tails,
     name: "Project Title",
@@ -103,13 +101,11 @@
     sceneNameElement.innerHTML = scene.data.id;
   }
 
-  //***------------- */
   toggleMapList();
 
   function toggleMapList() {
     let asideMapBtn = document.querySelector(".aside-mapBtn");
     let mapToggleIcon = document.querySelector(".mapToggleIcon");
-    console.log("mapToggleIcon", mapToggleIcon.offsetWidth);
 
     mapWrapper.classList.toggle("enabled");
     asideMapBtn.classList.toggle("enabled");
