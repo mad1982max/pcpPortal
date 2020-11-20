@@ -266,7 +266,7 @@ button:active {
   }
 
   .btn-back {
-    top: 3px;
+    top: 1px;
   }
 }
 
@@ -292,6 +292,6 @@ button:active {
   }
 
   .btn-back {
-    top: 6px;
+    top: 3px;
   }
 }
