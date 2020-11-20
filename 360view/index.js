@@ -169,11 +169,11 @@ function defineWidthHeightRestrict(widthEl, heightEl) {
 }
 
 function onloadFn() {
-  alert(
-    `window.innerWidth:${window.innerWidth}, dpr: ${
-      window.devicePixelRatio
-    }, header:${document.querySelector(".header").offsetHeight}`
-  );
+  // alert(
+  //   `window.innerWidth:${window.innerWidth}, dpr: ${
+  //     window.devicePixelRatio
+  //   }, header:${document.querySelector(".header").offsetHeight}`
+  // );
   document.body.style.opacity = 1;
   makeResizableMapWrapper("#mapWrapper");
 
