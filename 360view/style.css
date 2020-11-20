@@ -146,7 +146,7 @@ button:active {
   transform: translateX(100%);
   -webkit-transform: translateX(100%);
   -webkit-transition: opacity 0.5s ease-in-out 0.5s;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.5s ease-in-out 0.5s;
   align-items: center;
   justify-content: end;
 }
