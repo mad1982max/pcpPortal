@@ -61,27 +61,27 @@ class DepthCubemap{
 
     private _computeCanvasParameters(v: Vector3){
         v.normalize();
-        let faceIndex = 0;
+        let faceIndex;
         const vAbs: Vector3 = v.clone().absolute();
         let ma: number;
         let uv: Vector2;
         if(vAbs.z >= vAbs.x && vAbs.z >= vAbs.y)
         {
-            faceIndex = v.z < 0.0 ? 5 : 4;
+            faceIndex = v.z < 0.0 ? 3 : 2;
             ma = 0.5 / vAbs.z;
-            uv = new Vector2(v.z < 0.0 ? -v.x : v.x, -v.y);
+            uv = new Vector2(v.z < 0.0 ? -v.x : v.x, v.z < 0.0 ? -v.y : v.y); // for fi==2 y+- ; for 3 ???
         }
         else if(vAbs.y >= vAbs.x)
         {
-            faceIndex = v.y < 0.0 ? 3 : 2;
+            faceIndex = v.y < 0.0 ? 5 : 4;
             ma = 0.5 / vAbs.y;
-            uv = new Vector2(v.x, v.y < 0.0 ? -v.z : v.z);
+            uv = new Vector2(v.y < 0.0 ? -v.x : v.x, -v.z); // for fi==5 x+- ; for fi==4 y+-
         }
         else
         {
             faceIndex = v.x < 0.0 ? 1 : 0;
             ma = 0.5 / vAbs.x;
-            uv = new Vector2(v.x < 0.0 ? v.z : -v.z, -v.y);
+            uv = new Vector2(-v.z, v.x < 0.0 ? v.y : -v.y); // for fi==1 x+- & y+-
         }
         uv = uv.multiplyScalar(ma).addScalar(0.5);
 

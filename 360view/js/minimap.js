@@ -388,7 +388,7 @@ function buildSvg() {
     pointsOnLevel = getPointOnLevel(points, levelInfo, currentSubLevelToShow);
 
     drawSet(pointsOnLevel);
-    miniMapisLoad.notify();
+    miniMapLoaded.notify();
 
     mainLayer.transition().duration(400).attr("opacity", "1");
   });
@@ -497,17 +497,17 @@ clickNext.subscribe((pointName) => {
 });
 
 viewChangeObservable.subscribe(({ fov, yaw }) => {
-  if (yaw !== oldYaw) {
+  if (yaw && yaw !== oldYaw) {
     changeViewDirection(yaw);
     oldYaw = yaw;
   }
-  if (fov !== oldFov) {
+  if (fov && fov !== oldFov) {
     changeViewAngle(fov);
     oldFov = fov;
   }
 });
 
-miniMapisLoad.subscribe((data) => {
+miniMapLoaded.subscribe((data) => {
   buildViewCone();
   console.log("FLOOR EXISTS");
 });

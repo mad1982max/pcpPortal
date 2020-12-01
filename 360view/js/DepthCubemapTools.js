@@ -42,7 +42,9 @@ var DepthCubemap = /** @class */ (function () {
         if (!this.IsReady())
             return null;
         var _a = this._computeCanvasParameters(direction), x = _a.x, y = _a.y, faceIndex = _a.faceIndex;
-        //console.log(sceneControl.getProfileByQuery().fullPathToDepthCubeImages()[faceIndex]);
+        //console.log(faceIndex);
+        //if( faceIndex == 1)
+        console.log({ x: (_a.x * 4096).toFixed(0), y: (_a.y * 4096).toFixed(0), faceIndex: faceIndex });
         return this._getDistanceFromCanvas(faceIndex, x, y);
     };
     DepthCubemap.prototype.computeCoordinate = function (viewPosition, direction, distance) {
@@ -55,24 +57,24 @@ var DepthCubemap = /** @class */ (function () {
     };
     DepthCubemap.prototype._computeCanvasParameters = function (v) {
         v.normalize();
-        var faceIndex = 0;
+        var faceIndex;
         var vAbs = v.clone().absolute();
         var ma;
         var uv;
         if (vAbs.z >= vAbs.x && vAbs.z >= vAbs.y) {
-            faceIndex = v.z < 0.0 ? 5 : 4;
+            faceIndex = v.z < 0.0 ? 3 : 2;
             ma = 0.5 / vAbs.z;
-            uv = new THREE.Vector2(v.z < 0.0 ? -v.x : v.x, -v.y);
+            uv = new THREE.Vector2(v.z < 0.0 ? -v.x : v.x, v.z < 0.0 ? -v.y : v.y);
         }
         else if (vAbs.y >= vAbs.x) {
-            faceIndex = v.y < 0.0 ? 3 : 2;
+            faceIndex = v.y < 0.0 ? 5 : 4;
             ma = 0.5 / vAbs.y;
-            uv = new THREE.Vector2(v.x, v.y < 0.0 ? -v.z : v.z);
+            uv = new THREE.Vector2(v.y < 0.0 ? -v.x : v.x, -v.z);
         }
         else {
             faceIndex = v.x < 0.0 ? 1 : 0;
             ma = 0.5 / vAbs.x;
-            uv = new THREE.Vector2(v.x < 0.0 ? v.z : -v.z, -v.y);
+            uv = new THREE.Vector2(-v.z, v.x < 0.0 ? v.y : -v.y);
         }
         uv = uv.multiplyScalar(ma).addScalar(0.5);
         return { x: uv.x, y: uv.y, faceIndex: faceIndex };

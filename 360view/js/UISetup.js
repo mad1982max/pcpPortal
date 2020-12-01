@@ -423,6 +423,7 @@
         this.potreeUISetup();
         this.sphereVisibilityControlSetup();
         this.addRangeSlider();
+        this.addSideRangeSlider();
         this.addOtherPointsBudgetSlider();
     }
     UIControl.prototype = Object.defineProperties(Object.assign(Object.create(Object.prototype), {
@@ -468,18 +469,19 @@
             })
             showHideButton.click();
         },
-        createMeasurementIcon: function (iconName, onclickCallback){
+        addMeasurementCallback: function (containerElement, iconName, onclickCallback){
             Validator.validateString(iconName);
             Validator.validateFunction(onclickCallback);
+            Validator.throwParamIfFalse(containerElement && containerElement.nodeName === 'DIV');
 
-            const element = document.createElement('div');
-            element.classList.add('button-like');
+            const element = Array.prototype.find.call(containerElement.children, function (el){ return el.dataset.actionName === iconName});
             element.addEventListener('click', onclickCallback);
-            element.title = iconName;
-            const img = document.createElement('img');
-            img.src = '/assets/img/icons/' + iconName + '.svg';
-            element.append(img);
-            return element;
+            element.addEventListener('click', function (event){
+               Array.prototype.forEach.call(containerElement.children, function (el){
+                   el.classList.remove('selected-button');
+               });
+               if (iconName !== 'reset_tools') element.classList.add('selected-button');
+            });
         },
         potreeUISetup: function () {
             // these two lines are just for dev purposes
@@ -488,67 +490,71 @@
 
             const measurements = document.getElementById('measurements');
 
-            measurements.append(
-                this.createMeasurementIcon('angle', function(){
-                        viewer.measuringTool.startInsertion({
-                            showDistances: false,
-                            showAngles: true,
-                            showArea: false,
-                            closed: true,
-                            maxMarkers: 3,
-                            name: "Angle"});
-                    }
-                ),
-                this.createMeasurementIcon('point', function(){
-                        viewer.measuringTool.startInsertion({
-                            showDistances: false,
-                            showAngles: false,
-                            showCoordinates: true,
-                            showArea: false,
-                            closed: true,
-                            maxMarkers: 1,
-                            name: "Point"});
-                    }
-                ),
-                this.createMeasurementIcon('distance', function(){
-                        viewer.measuringTool.startInsertion({
-                            showDistances: true,
-                            showArea: false,
-                            closed: false,
-                            name: "Distance"});
-                    }
-                ),
-                this.createMeasurementIcon('height', function(){
-                        viewer.measuringTool.startInsertion({
-                            showDistances: false,
-                            showHeight: true,
-                            showArea: false,
-                            closed: false,
-                            maxMarkers: 2,
-                            name: "Height"});
-                    }
-                ),
-                this.createMeasurementIcon('area', function(){
-                        viewer.measuringTool.startInsertion({
-                            showDistances: true,
-                            showArea: true,
-                            closed: true,
-                            name: "Area"});
-                    }
-                ),
-                this.createMeasurementIcon('reset_tools', function(){
-                        viewer.scene.removeAllMeasurements();
-                    }
-                )
+            this.addMeasurementCallback(measurements, 'angle', function(){
+                    viewer.measuringTool.startInsertion({
+                        showDistances: false,
+                        showAngles: true,
+                        showArea: false,
+                        closed: true,
+                        maxMarkers: 3,
+                        name: "Angle"});
+                }
+            );
+            this.addMeasurementCallback(measurements, 'point', function(){
+                    viewer.measuringTool.startInsertion({
+                        showDistances: false,
+                        showAngles: false,
+                        showCoordinates: true,
+                        showArea: false,
+                        closed: true,
+                        maxMarkers: 1,
+                        name: "Point"});
+                }
+            );
+            this.addMeasurementCallback(measurements, 'distance', function(){
+                    viewer.measuringTool.startInsertion({
+                        showDistances: true,
+                        showArea: false,
+                        closed: false,
+                        name: "Distance"});
+                }
+            );
+            this.addMeasurementCallback(measurements, 'height', function(){
+                    viewer.measuringTool.startInsertion({
+                        showDistances: false,
+                        showHeight: true,
+                        showArea: false,
+                        closed: false,
+                        maxMarkers: 2,
+                        name: "Height"});
+                }
+            );
+            this.addMeasurementCallback(measurements, 'area', function(){
+                    viewer.measuringTool.startInsertion({
+                        showDistances: true,
+                        showArea: true,
+                        closed: true,
+                        name: "Area"});
+                }
+            );
+            this.addMeasurementCallback(measurements, 'reset_tools', function(){
+                    viewer.scene.removeAllMeasurements();
+                }
             );
         },
         sphereVisibilityControlSetup: function () {
-            $('#sphereVisibilityControl>label>input').change(function() {
-                let visible = this.checked;
+            const eye = document.getElementById('sphereVisibilityControlEye');
+            eye.addEventListener('click', function (){
+                const visible = eye.classList.contains('checked');
+                eye.classList.toggle('checked');
                 Object.values(meshDictionary).map(function (o) { return o.object3d; }).forEach(function (mesh) {
                     mesh.visible = visible;
-                })
-            });
+                });
+            })
+            /*$('#sphereVisibilityControl>label>input').change(function() {
+                let visible = this.checked;
+            });//*/
+
         },
         addRangeSlider: function () {
             const self = this;
@@ -576,6 +582,54 @@
                     setTitle(event.values);
                 }
             );
+        },
+        addSideRangeSlider: function () {
+            const self = this;
+            const sceneControl = this.sceneControl;
+
+            const toggle = document.getElementById('range-control-slide-trigger');
+            toggle.addEventListener('click', function (){
+                toggle.classList.toggle('checked');
+            });
+            const slider_container = toggle.getElementsByClassName('slider-container')[0];
+            if (slider_container) slider_container.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
+            else return;
+            const range_control_slider = document.getElementById('range-control-slider');
+            const range_control_output_bubble = document.getElementById('range-control-output-bubble');
+            range_control_slider.addEventListener('input', function () {
+                //console.log(this.value);
+                const indent = 29; // left and right indent for thumb bubble
+                const val = Number(((this.value - this.min) * 100) / (this.max - this.min));
+                range_control_output_bubble.style.left = `calc(${val}% + (${indent * ( 1 - val / 50)}px))`;
+                range_control_output_bubble.textContent = this.value;
+                sceneControl.toggleVisibilityOtherPoints(self.otherPointsBudgetSliderValue, [0, Number(this.value)]);
+            });
+            range_control_slider.dispatchEvent(new Event('input'));
+            /*const rangeSlider = $('#sphereRangeSlider');
+            const rangeDisplayingSpan = $('#otherPointsRangeControl>p>span:last-child');
+            const setTitle = function(values){
+                rangeDisplayingSpan.text(values[0] + ' - ' + values[1]);
+            };
+            rangeSlider.slider({
+                range: true,
+                values: [0.1, 150],
+                min: 0.1,
+                max: 150,
+                step: 0.1,
+                slide: function( event, ui ) {
+                    setTitle(ui.values);
+                    sceneControl.toggleVisibilityOtherPoints(self.otherPointsBudgetSliderValue, ui.values);
+                }
+            });
+            setTitle([0.1, 150]);
+            sceneControl.addEventListener('displayedOtherPointsChanged',
+                function (event){
+                    rangeSlider.slider( "option", "values", event.values );
+                    setTitle(event.values);
+                }
+            );//*/
         },
         addOtherPointsBudgetSlider: function () {
             const self = this;
@@ -612,7 +666,8 @@
         },
         otherPointsBudgetSliderValue: {
             get: function () {
-                return $('#otherPointsBudgetSlider').slider( "option", "value" );
+                return Number(document.getElementById('otherPointsBudgetSlider').value);
+                //return $('#otherPointsBudgetSlider').slider( "option", "value" );
             }
         },
     });

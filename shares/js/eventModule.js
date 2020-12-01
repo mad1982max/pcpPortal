@@ -13,4 +13,4 @@ Observable.prototype.notify = function(data) {
 const switchPhoto360Observable = new Observable();
 const viewChangeObservable = new Observable();
 const clickNext = new Observable();
-const miniMapisLoad = new Observable();
+const miniMapLoaded = new Observable();

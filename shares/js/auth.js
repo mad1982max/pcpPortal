@@ -8,7 +8,7 @@
     const rejectCallbacks = [];
     const commonCallbacks = [];
 
-    const loginData = {'admin':{'password':'bixit', 'token':'3050cfad-2354-4cfe-8e86-40b9de3ddecb'}};
+    const loginData = {'admin':{'password':'bixit', 'token':'3050cfad-2354-4cfe-8e86-40b9de3ddecb'},'Dolwinalpha':{'password':'LLrttqG2', 'token':'e11ff623-14f5-4951-bb8c-2cf7c9c3621e'}};
     Object.freeze(loginData);
     Object.values(loginData).forEach(function(o){Object.freeze(o);});
     Object.defineProperty(window, 'loginData', {value: loginData});

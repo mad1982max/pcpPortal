@@ -32,8 +32,6 @@
 
 	<script src="js/DepthCubemapTools.js"></script>
 	<script>
-		// var position = viewer.scene.camera.position;
-		// var direction = new THREE.Vector3( 0, 0, - 1 ).applyQuaternion(viewer.scene.camera.quaternion);
 		var depthCubemap = new DepthCubemap();
 	</script>
 	<script src="./build/potree/potree.js"></script>
@@ -84,11 +82,26 @@
 					</div>
 				</a>
 				<div class="vertical-placeholder"></div>
-				<div id="measurements"></div>
+				<div id="measurements">
+					<div class="button-like" data-action-name="angle" title="angle"><img src="/assets/img/icons/angle.svg"></div>
+					<div class="button-like" data-action-name="point" title="point"><img src="/assets/img/icons/point.svg"></div>
+					<div class="button-like" data-action-name="distance" title="distance"><img src="/assets/img/icons/distance.svg"></div>
+					<div class="button-like" data-action-name="height" title="height"><img src="/assets/img/icons/height.svg"></div>
+					<div class="button-like" data-action-name="area" title="area"><img src="/assets/img/icons/area.svg"></div>
+					<div class="button-like" data-action-name="reset_tools" title="reset_tools"><img src="/assets/img/icons/reset_tools.svg"></div>
+				</div>
 				<div class="vertical-placeholder"></div>
-				<div id="eye" class="button-like checkbox-like">
+				<div id="sphereVisibilityControlEye" class="button-like checkbox-like">
 					<img src="/assets/img/icons/invis.svg">
 					<img class="checkbox-reverse" src="/assets/img/icons/vis.svg">
+				</div>
+				<div id="range-control-slide-trigger" class="button-like checkbox-like">
+					<img src="/assets/img/icons/invis.svg">
+					<img class="checkbox-reverse" src="/assets/img/icons/vis.svg">
+					<div class="slider-container">
+						<input type="range" min="0" max="150" value="150" class="slider" step=".99" id="range-control-slider">
+						<output id="range-control-output-bubble" class="bubble"></output>
+					</div>
 				</div>
 			</aside>
 		</div>
@@ -119,12 +132,6 @@
 					</label>
 					<div></div>
 				</div>
-				<div id="sphereVisibilityControl">
-					<label class="container">spheres are visible
-						<input type="checkbox" checked>
-						<span class="checkmark"></span>
-					</label>
-				</div>
 				<div id="otherPointsRangeControl">
 					<p>
 						<span>Other points visible in range</span>
@@ -144,15 +151,12 @@
 			</div>
 		</div>
 		<div id="potree_sidebar_container"> </div>
-		<!--<div id="rightDownPanel" title="tap info">
-			<span id="textOutput"><p></p><p></p></span>
-		</div>-->
     </div>
 
 	<script>
 		let profiles = [];
 		const cubeSides = ['r','l','u','d','f','b'].map(function (side) { return side + '.jpg'; });
-		const depthMapSides = ['0','1','4','5','2','3'].map(function (side) { return side + '.png'; });
+		const depthMapSides = ['0','1','2','3','4','5'].map(function (side) { return side + '.png'; });
 		let config = new GeneralPointConfig('./pointclouds', profiles, 'pointcloud/cloud.js', cubeSides, '360', depthMapSides, 'depth-map-cube');
 		profiles.push(new PointProfile(config, '1', new THREE.Vector3(-44.1870, 57.0310, 27.2240), new THREE.Euler(0,0,-54)));
 		profiles.push(new PointProfile(config, '2', new THREE.Vector3(-45.1440, 57.0160, 27.2290), new THREE.Euler(0,0,38)));
@@ -197,6 +201,9 @@
 	  });
 	  sceneControl.addEventListener('cameraRotationChange', function (data) {
 		  return viewChangeObservable.notify({ yaw: data.angle });
+	  });
+	  viewer.scene.camera.addEventListener('fov-changed', function (){
+		  viewChangeObservable.notify({ fov: viewer.fov / 180 * Math.PI });
 	  });
 
 	  let profile = sceneControl.getProfileByQuery();

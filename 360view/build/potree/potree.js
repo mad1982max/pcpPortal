@@ -9602,8 +9602,7 @@ Potree.utils = class{
 		const ray = raycaster.ray;
 		const direction = ray.direction;
 		const distance = depthCubemap.getDistance(direction);
-		if (!distance) return null;
-		console.log(distance.toFixed(2));
+		if (!distance || distance.toFixed(0) == 516) return null; //distance === 515.690673828125 || distance === 515.6907348632812
 		const coordinate = direction.clone().normalize().multiplyScalar(distance).add(camera.position);
 		return {
 			location: coordinate,
