@@ -599,7 +599,9 @@
             const range_control_slider = document.getElementById('range-control-slider');
             const range_control_output_bubble = document.getElementById('range-control-output-bubble');
             range_control_slider.addEventListener('input', function () {
-                //console.log(this.value);
+                if (this.value%3 === 1 || this.value%7 === 1){
+                    this.value--;
+                }
                 const indent = 29; // left and right indent for thumb bubble
                 const val = Number(((this.value - this.min) * 100) / (this.max - this.min));
                 range_control_output_bubble.style.left = `calc(${val}% + (${indent * ( 1 - val / 50)}px))`;
@@ -607,29 +609,6 @@
                 sceneControl.toggleVisibilityOtherPoints(self.otherPointsBudgetSliderValue, [0, Number(this.value)]);
             });
             range_control_slider.dispatchEvent(new Event('input'));
-            /*const rangeSlider = $('#sphereRangeSlider');
-            const rangeDisplayingSpan = $('#otherPointsRangeControl>p>span:last-child');
-            const setTitle = function(values){
-                rangeDisplayingSpan.text(values[0] + ' - ' + values[1]);
-            };
-            rangeSlider.slider({
-                range: true,
-                values: [0.1, 150],
-                min: 0.1,
-                max: 150,
-                step: 0.1,
-                slide: function( event, ui ) {
-                    setTitle(ui.values);
-                    sceneControl.toggleVisibilityOtherPoints(self.otherPointsBudgetSliderValue, ui.values);
-                }
-            });
-            setTitle([0.1, 150]);
-            sceneControl.addEventListener('displayedOtherPointsChanged',
-                function (event){
-                    rangeSlider.slider( "option", "values", event.values );
-                    setTitle(event.values);
-                }
-            );//*/
         },
         addOtherPointsBudgetSlider: function () {
             const self = this;
