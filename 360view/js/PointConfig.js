@@ -60,9 +60,6 @@ function PointProfile(generalPointConfig, name, position, euler360rotation) {
     this.getLayerInfo = function () {
         const z = this.position.z;
 
-        if (z === 27.224 || z === 27.229) return { layer: '_', sub: '_' }; // for Conoco points
-        console.info('Conoco specific code here!');
-
         if (z < 27) {
             return { layer: 'level_22.8', sub: '_' };
         }

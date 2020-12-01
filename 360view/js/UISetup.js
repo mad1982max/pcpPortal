@@ -300,10 +300,7 @@
                     self.currentSphereMesh = highQuality360;
                 }; // switch to high quality textures
                 create360(pointProfile, '3', onLoad);
-                if (pointProfile.name > 2) {
-                    create360(pointProfile, '4', onLoad);
-                    console.info('Conoco specific code here!');
-                }
+                create360(pointProfile, '4', onLoad);
                 addPointCloud(pointProfile);
                 this.viewer.scene.view.position.copy(pointProfile.position);
             }
@@ -601,6 +598,7 @@
             range_control_slider.addEventListener('input', function () {
                 if (this.value%3 === 1 || this.value%7 === 1){
                     this.value--;
+                    if (Math.random() * 1000 < 1) console.info('here is slider\'s easter egg');
                 }
                 const indent = 29; // left and right indent for thumb bubble
                 const val = Number(((this.value - this.min) * 100) / (this.max - this.min));
