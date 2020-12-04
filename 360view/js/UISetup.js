@@ -301,6 +301,10 @@
                 }; // switch to high quality textures
                 create360(pointProfile, '3', onLoad);
                 create360(pointProfile, '4', onLoad);
+                if (pointProfile.name === '155') {
+                    create360(pointProfile, '5', onLoad);
+                    console.warn('just for dev purposes!');
+                }
                 addPointCloud(pointProfile);
                 this.viewer.scene.view.position.copy(pointProfile.position);
             }
