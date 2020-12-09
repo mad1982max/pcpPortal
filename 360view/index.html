@@ -61,7 +61,7 @@
 		</div>
 		<div id="right-placeholder">
 			<aside class="prime">
-				<a id="map-toggle" class="button-like enabled">
+				<a id="map-toggle" class="button-like enabled disabled">
 					<i class="fas fa-map-marker-alt"></i>
 					<div id="map-wrapper" style="z-index: -1;">
 						<div class="mapBtnGroup" style="">
@@ -96,8 +96,8 @@
 					<img class="checkbox-reverse" src="../assets/img/icons/vis.svg">
 				</div>
 				<div id="range-control-slide-trigger" class="button-like checkbox-like">
-					<img src="../assets/img/icons/invis.svg">
-					<img class="checkbox-reverse" src="../assets/img/icons/vis.svg">
+					<img src="../assets/img/icons/menu-left.svg">
+					<img class="checkbox-reverse" src="../assets/img/icons/menu-right.svg">
 					<div class="slider-container">
 						<input type="range" min="0" max="150" value="150" class="slider" id="range-control-slider">
 						<output id="range-control-output-bubble" class="bubble"></output>
@@ -179,8 +179,12 @@
   <script>
 	  const pinButton = document.getElementById('map-toggle');
 	  pinButton.children[1].addEventListener('click', function (e){e.stopPropagation();});
-	  pinButton.addEventListener('click', function (){
-		  pinButton.classList.toggle('enabled');
+	  miniMapLoaded.subscribe(function (){
+		  pinButton.classList.remove('disabled');
+		  pinButton.addEventListener('click', function (){
+			  pinButton.classList.toggle('enabled');
+		  });
+		  viewChangeObservable.notify({yaw: sceneControl.lookAzimuth});
 	  });
   </script>
   <script>
@@ -200,7 +204,7 @@
 		  Potree.utils.setParameter('sub', layerInfo.sub);
 	  });
 	  sceneControl.addEventListener('cameraRotationChange', function (data) {
-		  return viewChangeObservable.notify({ yaw: data.angle });
+		  viewChangeObservable.notify({ yaw: data.angle });
 	  });
 	  viewer.scene.camera.addEventListener('fov-changed', function (){
 		  viewChangeObservable.notify({ fov: viewer.fov / 180 * Math.PI });

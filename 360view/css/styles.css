@@ -137,17 +137,17 @@ a:visited {
 #map-toggle {
     background-color: dodgerblue;
 }
-
 #map-toggle.enabled {
     background-color: transparent;
 }
-
 #map-toggle>i {
     color: #f2f2f2;
 }
-
 #map-toggle.enabled>i {
     color: dodgerblue;
+}
+#map-toggle.disabled>i{
+    color: #0c5460;
 }
 
 /*#map-list {

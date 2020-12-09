@@ -29,8 +29,8 @@ var DepthCubemap = /** @class */ (function () {
     };
     DepthCubemap.prototype._getDistanceFromCanvas = function (faceIndex, xFactor, yFactor) {
         var canvas = this._canvases[faceIndex];
-        var x = xFactor * canvas.width;
-        var y = yFactor * canvas.height;
+        var x = Number((xFactor * canvas.width).toFixed());
+        var y = Number((yFactor * canvas.height).toFixed());
         var data = canvas.getContext('2d').getImageData(x, y, 1, 1).data;
         var view = new DataView(new ArrayBuffer(4));
         data.reverse().forEach(function (b, i) {

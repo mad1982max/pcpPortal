@@ -35,8 +35,8 @@ class DepthCubemap{
 
     private _getDistanceFromCanvas(faceIndex: number, xFactor: number, yFactor: number){
         const canvas = this._canvases[faceIndex];
-        const x = xFactor * canvas.width;
-        const y = yFactor * canvas.height;
+        const x = Number((xFactor * canvas.width).toFixed());
+        const y = Number((yFactor * canvas.height).toFixed());
         const data = canvas.getContext('2d').getImageData(x, y, 1, 1).data;
         const view = new DataView(new ArrayBuffer(4));
         data.reverse().forEach(function (b, i) {

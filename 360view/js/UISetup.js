@@ -301,10 +301,10 @@
                 }; // switch to high quality textures
                 create360(pointProfile, '3', onLoad);
                 create360(pointProfile, '4', onLoad);
-                if (pointProfile.name === '155') {
+                /*if (pointProfile.name === '155') {
                     create360(pointProfile, '5', onLoad);
                     console.warn('just for dev purposes!');
-                }
+                }//*/
                 addPointCloud(pointProfile);
                 this.viewer.scene.view.position.copy(pointProfile.position);
             }
@@ -320,12 +320,12 @@
                         type: { value: 'cameraRotationChange' }
                     });
                     self.dispatchEvent(eventObj);
-                })
+                });
             } // camera rotation change
             viewer.scene.scene.remove(viewer.scene.scene.children.find(value => value.type === 'LineSegments')); // remove weird mesh next to (0,0,0)
             viewer.scene.view.pitch = 0;
             viewer.scene.view.yaw = yaw;
-            setTimeout(function (){viewChangeObservable.notify({ yaw: self.lookAzimuth });}, 2000);
+            //setTimeout(function (){viewChangeObservable.notify({ yaw: self.lookAzimuth });}, 2000);
             profileLoaded = true;
         },
         getProfileByIndex: function (profileIndex) {
@@ -424,8 +424,8 @@
         this.potreeUISetup();
         this.sphereVisibilityControlSetup();
         this.addRangeSlider();
-        this.addSideRangeSlider();
         this.addOtherPointsBudgetSlider();
+        this.addSideRangeSlider();
     }
     UIControl.prototype = Object.defineProperties(Object.assign(Object.create(Object.prototype), {
         constructor: UIControl,
@@ -544,18 +544,18 @@
             );
         },
         sphereVisibilityControlSetup: function () {
+            const self = this;
             const eye = document.getElementById('sphereVisibilityControlEye');
             eye.addEventListener('click', function (){
                 const visible = eye.classList.contains('checked');
                 eye.classList.toggle('checked');
-                Object.values(meshDictionary).map(function (o) { return o.object3d; }).forEach(function (mesh) {
+                const newPointBudget = visible ? Object.entries(meshDictionary).length : 0;
+                self.otherPointsBudgetSliderValue = newPointBudget;
+                sceneControl.toggleVisibilityOtherPoints(newPointBudget, self.rangeSliderValues);
+                /*Object.values(meshDictionary).map(function (o) { return o.object3d; }).forEach(function (mesh) {
                     mesh.visible = visible;
-                });
-            })
-            /*$('#sphereVisibilityControl>label>input').change(function() {
-                let visible = this.checked;
-            });//*/
-
+                });//*/
+            });
         },
         addRangeSlider: function () {
             const self = this;
@@ -647,8 +647,11 @@
         },
         otherPointsBudgetSliderValue: {
             get: function () {
-                return Number(document.getElementById('otherPointsBudgetSlider').value);
-                //return $('#otherPointsBudgetSlider').slider( "option", "value" );
+                //return Number(document.getElementById('otherPointsBudgetSlider').value);
+                return $('#otherPointsBudgetSlider').slider( "option", "value" );
+            },
+            set: function(value){
+                $('#otherPointsBudgetSlider').slider( "option", "value", value );
             }
         },
     });
